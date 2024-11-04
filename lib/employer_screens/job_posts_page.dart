@@ -29,10 +29,13 @@ class _JobPostsPageState extends State<JobPostsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: const Color.fromARGB(255, 27, 74, 109),
-        ),
-        body: StreamBuilder<QuerySnapshot>(
+         appBar: AppBar(
+       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+       title: Text(' Job Posts History', style: CustomTextStyle.semiBoldText.copyWith(fontSize: responsiveSize(context, 0.04)),),
+       ),
+        body: Container(
+          color: const Color.fromARGB(255, 255, 255, 255),
+        child:  StreamBuilder<QuerySnapshot>(
             stream: _userId != null
                 ? postsProvider.getSpecificPostsStream(_userId)
                 : const Stream.empty(),
@@ -48,8 +51,8 @@ class _JobPostsPageState extends State<JobPostsPage> {
                 );
               }
               if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                return const Center(
-                  child: Text("No posts available"),
+                return  Center(
+                  child: Text("No posts available", style: CustomTextStyle.regularText.copyWith(fontSize: responsiveSize(context, 0.04)) ,),
                 );
               }
 
@@ -76,13 +79,14 @@ class _JobPostsPageState extends State<JobPostsPage> {
                     return Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Card(
-                            color: const Color.fromARGB(255, 255, 255, 255),
+                            color: const Color.fromARGB(255, 237, 237, 237),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5),
+                              side: BorderSide(color: Colors.white),
+                              borderRadius: BorderRadius.circular(15),
                             ),
                             elevation: 4.0,
                             margin:
-                                const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
+                                const EdgeInsets.fromLTRB(0.0, 2.0, 0.0, 2.0),
                             child: Padding(
                                 padding: const EdgeInsets.all(10.0),
                                 child: Column(
@@ -108,10 +112,9 @@ class _JobPostsPageState extends State<JobPostsPage> {
                                                 style: CustomTextStyle
                                                     .semiBoldText
                                                     .copyWith(
-                                                  color: const Color.fromARGB(
-                                                      255, 0, 0, 0),
+                                                 
                                                   fontSize: responsiveSize(
-                                                      context, 0.05),
+                                                      context, 0.04),
                                                 ),
                                               ),
                                               Padding(
@@ -120,7 +123,7 @@ class _JobPostsPageState extends State<JobPostsPage> {
                                                 child: Text(
                                                   role,
                                                   style: CustomTextStyle
-                                                      .roleRegularText,
+                                                      .typeRegularText,
                                                 ),
                                               ),
                                             ],
@@ -145,27 +148,43 @@ class _JobPostsPageState extends State<JobPostsPage> {
                                           ? Row(
                                               children: [
                                                 Text(location,
-                                                    style: const TextStyle(
-                                                        color: Colors.blue)),
+                                                    style:  CustomTextStyle.regularText.copyWith(
+                                                 
+                                                  fontSize: responsiveSize(
+                                                      context, 0.04),
+                                                ),
+                                                        ),
                                               ],
                                             )
                                           : Container(),
                                       Text(
                                         "Type of Job: $type",
-                                        style: CustomTextStyle.typeRegularText,
+                                        style: CustomTextStyle.regularText.copyWith(
+                                                 
+                                                  fontSize: responsiveSize(
+                                                      context, 0.04),
+                                                ),
                                       ),
                                       Text(
                                         "Working Hours: $workingHours",
-                                        style: CustomTextStyle.regularText,
+                                        style: CustomTextStyle.regularText.copyWith(
+                                                 
+                                                  fontSize: responsiveSize(
+                                                      context, 0.04),
+                                                ),
                                       ),
                                       Text(
                                         "Start Date: $startDate",
-                                        style: CustomTextStyle.regularText,
+                                        style: CustomTextStyle.regularText.copyWith(
+                                                 
+                                                  fontSize: responsiveSize(
+                                                      context, 0.04),
+                                                ),
                                       ),
                                       const SizedBox(height: 15),
                                       Row(children: [
                                         IconButton(
-                                            icon: const Icon(Icons.edit),
+                                            icon: const Icon(Icons.edit, color: Color.fromARGB(255, 243, 107, 4),),
                                             onPressed: () {
                                               if (role == 'Employer') {
                                                 Navigator.push(
@@ -186,29 +205,45 @@ class _JobPostsPageState extends State<JobPostsPage> {
                                               }
                                             }),
                                         IconButton(
-                                            icon: const Icon(Icons.delete),
+                                            icon: const Icon(Icons.delete, color: Color.fromARGB(255, 243, 107, 4),),
                                             onPressed: () {
                                               showDialog(
                                                 context: context,
                                                 builder:
                                                     (BuildContext context) {
                                                   return AlertDialog(
-                                                    title: const Text(
-                                                        'Confirm Deletion'),
-                                                    content: const Text(
-                                                        'Are you sure you want to delete this post? This action cannot be undone.'),
+                                                    title: Text(
+                                                        'Confirm Deletion', style: CustomTextStyle.semiBoldText.copyWith(
+                                                 
+                                                  fontSize: responsiveSize(
+                                                      context, 0.04),
+                                                ),),
+                                                    content:  Text(
+                                                        'Are you sure you want to delete this post? This action cannot be undone.', style: CustomTextStyle.regularText.copyWith(
+                                                 
+                                                  fontSize: responsiveSize(
+                                                      context, 0.04),
+                                                ),),
                                                     actions: <Widget>[
                                                       TextButton(
-                                                        child: const Text(
-                                                            'Cancel'),
+                                                        child:  Text(
+                                                            'Cancel',  style: CustomTextStyle.regularText.copyWith(
+                                                 
+                                                  fontSize: responsiveSize(
+                                                      context, 0.04),
+                                                ),),
                                                         onPressed: () {
                                                           Navigator.of(context)
                                                               .pop();
                                                         },
                                                       ),
                                                       TextButton(
-                                                        child: const Text(
-                                                            'Delete'),
+                                                        child:  Text(
+                                                            'Delete', style: CustomTextStyle.regularText.copyWith(
+                                                 
+                                                  fontSize: responsiveSize(
+                                                      context, 0.04),
+                                                ),),
                                                         onPressed: () async {
                                                           final postsProvider =
                                                               Provider.of<
@@ -231,6 +266,7 @@ class _JobPostsPageState extends State<JobPostsPage> {
                                       ])
                                     ]))));
                   });
-            }));
+            }))
+            );
   }
 }

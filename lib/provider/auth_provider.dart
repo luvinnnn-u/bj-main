@@ -3,6 +3,9 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:bluejobs/model/user_model.dart';
 import 'package:bluejobs/screens_for_auth/signin.dart';
+import 'package:bluejobs/styles/custom_theme.dart';
+import 'package:bluejobs/styles/responsive_utils.dart';
+import 'package:bluejobs/styles/textstyle.dart';
 import 'package:bluejobs/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -19,6 +22,8 @@ class AuthProvider with ChangeNotifier {
   String get uid => _uid ?? '';
   UserModel? _userModel;
   UserModel get userModel => _userModel!;
+  //for the removing of verifuy account
+  bool get isUserActivated => _userModel?.isEnabled ?? false;
 
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
@@ -356,35 +361,53 @@ class AuthProvider with ChangeNotifier {
   Future<String?> showPasswordPromptDialog(BuildContext context) async {
     final TextEditingController passwordController = TextEditingController();
 
-    return showDialog<String>(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Enter Password'),
-          content: TextField(
-            controller: passwordController,
-            obscureText: true,
-            decoration: const InputDecoration(
-              labelText: 'Password',
-              border: OutlineInputBorder(),
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(passwordController.text);
-              },
-              child: Text('Confirm'),
-            ),
+return showDialog<String>(
+  context: context,
+  builder: (context) {
+    return AlertDialog(
+      backgroundColor: Color.fromARGB(255, 255, 255, 255),
+      title: Container(
+        alignment: Alignment.centerLeft,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Are you sure?',
+                style: CustomTextStyle.semiBoldText
+                    .copyWith(fontSize: responsiveSize(context, 0.04))),
+            SizedBox(height: 15),
+            Text('If yes, pls enter your password',
+                style: CustomTextStyle.regularText.copyWith(
+                    fontSize: responsiveSize(context, 0.04))),
           ],
-        );
-      },
+        ),
+      ),
+      content: TextField(
+        controller: passwordController,
+        obscureText: true,
+        decoration: customInputDecoration('Password'),
+      ),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: Text('Cancel',  style: CustomTextStyle.regularText.copyWith(
+                  fontSize: responsiveSize(context, 0.04),
+                  ),),
+        ),
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop(passwordController.text);
+          },
+          child: Text('Confirm',  style: CustomTextStyle.typeRegularText.copyWith(
+                  fontSize: responsiveSize(context, 0.04),
+                  ), ),
+        ),
+      ],
     );
-  }
+  },
+);
 }
+}
+

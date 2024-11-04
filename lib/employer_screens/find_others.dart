@@ -57,14 +57,14 @@ class _FindOthersPageState extends State<FindOthersPage> {
   }
 
   Widget build(BuildContext context) {
-    final appBarColor = Color.fromARGB(255, 49, 92, 162);
+    final appBarColor = Color.fromARGB(255, 7, 30, 47);
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: appBarColor,
         leading: IconButton(
-          icon:
-              const Icon(Icons.arrow_back, color: Color.fromARGB(255, 9, 5, 5)),
+          icon: const Icon(Icons.arrow_back,
+              color: Color.fromARGB(255, 255, 255, 255)),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
@@ -73,25 +73,37 @@ class _FindOthersPageState extends State<FindOthersPage> {
               .copyWith(fontSize: responsiveSize(context, 0.04)),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Column(
-          children: [
-            const SizedBox(height: 120),
-            Center(
-              child: CustomButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => NearWorkers(),
-                    ),
-                  );
-                },
-                buttonText: 'Find workers near me',
+      body: Container(
+        color: Color.fromARGB(255, 7, 30, 47),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Column(
+            children: [
+              const SizedBox(height: 120),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'Connect with everyone easily!',
+                  style: CustomTextStyle.semiBoldText
+                      .copyWith(fontSize: responsiveSize(context, 0.04)),
+                ),
               ),
-            ),
-          ],
+              const SizedBox(height: 15),
+              Center(
+                child: CustomButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => NearWorkers(),
+                      ),
+                    );
+                  },
+                  buttonText: 'Find workers near me',
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

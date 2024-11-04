@@ -3,6 +3,7 @@ import 'package:bluejobs/default_screens/comment.dart';
 import 'package:bluejobs/provider/mapping/location_service.dart';
 import 'package:bluejobs/provider/notifications/notifications_provider.dart';
 import 'package:bluejobs/provider/posts_provider.dart';
+import 'package:bluejobs/styles/custom_button.dart';
 import 'package:bluejobs/styles/responsive_utils.dart';
 import 'package:bluejobs/styles/textstyle.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -58,13 +59,19 @@ class _ProfilePageState extends State<ProfilePage> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Profile'),
+        //  backgroundColor: Color.fromARGB(255, 7, 30, 47),
+          leading: IconButton(
+          icon: const Icon(Icons.arrow_back,
+              color: Color.fromARGB(255, 7, 30, 47),),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+          title:  Text('Profile', style: CustomTextStyle.semiBoldText.copyWith(fontSize: responsiveSize(context, 0.04)),),
           actions: [
             auth.currentUser?.uid != userData?['uid']
                 ? Padding(
                     padding: const EdgeInsets.all(20.0),
                     child: IconButton(
-                      icon: const Icon(Icons.message),
+                      icon: const Icon(Icons.message, color: Colors.white,),
                       onPressed: () {
                         Navigator.push(
                           context,
@@ -82,7 +89,9 @@ class _ProfilePageState extends State<ProfilePage> {
                 : Container(),
           ],
         ),
-        body: userData == null
+        body: Container(
+      //   color:  Color.fromARGB(255, 7, 30, 47),
+        child:userData == null
             ? const Center(child: CircularProgressIndicator())
             : SingleChildScrollView(
                 child: Column(
@@ -106,6 +115,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ],
                 ),
               ),
+      ),
       ),
     );
   }
@@ -146,25 +156,35 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  
+
   Widget buildTabBar() => Container(
-        alignment: Alignment.center,
-        child: TabBar(
-          isScrollable: true,
-          tabs: [
-            SizedBox(
-              width: MediaQuery.of(context).size.width / 3,
-              child: const Tab(text: 'Posts'),
-            ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width / 4,
-              child: const Tab(text: 'About'),
-            ),
-          ],
-          labelColor: const Color.fromARGB(255, 0, 0, 0),
-          unselectedLabelColor: const Color.fromARGB(255, 124, 118, 118),
-          labelStyle: CustomTextStyle.regularText,
+  alignment: Alignment.center,
+  child: TabBar(
+    isScrollable: true,
+    tabs: [
+      SizedBox(
+        width: MediaQuery.of(context).size.width / 3,
+        child: const Tab(text: 'Posts'),
+      ),
+      SizedBox(
+        width: MediaQuery.of(context).size.width / 4,
+        child: const Tab(text: 'About'),
+      ),
+    ],
+    labelColor: const Color.fromARGB(255, 0, 0, 0), // White when selected
+    unselectedLabelColor: const Color.fromARGB(255, 124, 118, 118), // Gray when not selected
+    labelStyle: CustomTextStyle.semiBoldText.copyWith(fontSize: responsiveSize(context, 0.04)),
+    indicator: BoxDecoration( // White indicator
+      border: Border(
+        bottom: BorderSide(
+          color: const Color.fromARGB(255, 7, 30, 47),
+          width: 2,
         ),
-      );
+      ),
+    ),
+  ),
+);
 
   Widget buildTabBarView() => TabBarView(
         children: [
@@ -221,22 +241,23 @@ class _ProfilePageState extends State<ProfilePage> {
                 String description = post['description'];
                 String type = post['type'];
                 String location = post['location'] ?? ''; // for job post
-                String rate = post['rate'] ?? ''; // for job post
-                String numberOfWorkers = post['numberOfWorkers'] ?? '';
+
                 String startDate = post['startDate'] ?? '';
-                String endDate = post['endDate'] ?? '';
+
                 String workingHours =
                     post['workingHours'] ?? ''; // for job post
 
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Card(
-                    color: const Color.fromARGB(255, 255, 255, 255),
+                  //  color: const Color.fromARGB(255, 7, 30, 47),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
+                      side: BorderSide(color: Colors.white),
+                      borderRadius: BorderRadius.circular(15),
                     ),
                     elevation: 4.0,
-                    margin: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
+                   // margin: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
+                    margin: const EdgeInsets.symmetric(vertical: 1.0, horizontal: 0.0),
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: Column(
@@ -258,7 +279,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     name,
                                     style:
                                         CustomTextStyle.semiBoldText.copyWith(
-                                      color: const Color.fromARGB(255, 0, 0, 0),
+                            
                                       fontSize: responsiveSize(context, 0.04),
                                     ),
                                   ),
@@ -266,7 +287,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                     padding: const EdgeInsets.only(right: 55.0),
                                     child: Text(
                                       role,
-                                      style: CustomTextStyle.roleRegularText,
+                                      style: CustomTextStyle.typeRegularText.copyWith(
+                            
+                                      fontSize: responsiveSize(context, 0.04),)
                                     ),
                                   ),
                                 ],
@@ -301,42 +324,22 @@ class _ProfilePageState extends State<ProfilePage> {
                                                 text: '$lat, $lon'));
                                       },
                                       child: Text("Location: $location",
-                                          style: const TextStyle(
-                                              color: Colors.blue)),
+                                          style:  CustomTextStyle.regularText
+                                              ),
                                     ),
                                   ],
                                 )
                               : Container(),
                           Text(
                             "Type of Job: $type",
-                            style: CustomTextStyle.typeRegularText,
+                            style: CustomTextStyle.regularText.copyWith(
+                            
+                                      fontSize: responsiveSize(context, 0.04)),
                           ),
-                          role == 'Employer'
-                              ? Text(
-                                  "Rate: $rate",
-                                  style: CustomTextStyle.regularText,
-                                )
-                              : Container(),
 
                           role == 'Employer'
                               ? Column(
                                   children: [
-                                    Row(
-                                      children: [
-                                        Text(
-                                          "Workers Needed: $numberOfWorkers",
-                                          style: CustomTextStyle.regularText,
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          "Rate: $rate",
-                                          style: CustomTextStyle.regularText,
-                                        ),
-                                      ],
-                                    ),
                                     Row(
                                       children: [
                                         Text(
@@ -349,14 +352,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                       children: [
                                         Text(
                                           "Start Date: $startDate",
-                                          style: CustomTextStyle.regularText,
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          "End Date: $endDate",
                                           style: CustomTextStyle.regularText,
                                         ),
                                       ],
@@ -432,8 +427,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                       dynamic>)
                                                               .contains(
                                                                   auth.currentUser!.uid)
-                                                      ? Colors.blue
-                                                      : Colors.grey,
+                                                      ? const Color.fromARGB(255, 243, 107, 4)
+                                                      : const Color.fromARGB(255, 255, 255, 255),
                                                 ),
                                                 const SizedBox(width: 5),
                                                 Text(
@@ -452,7 +447,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                             },
                                             child: const Row(
                                               children: [
-                                                Icon(Icons.comment),
+                                                Icon(Icons.comment, color: Colors.white,),
                                                 SizedBox(width: 5),
                                                 Text(
                                                   'Comments',
@@ -585,7 +580,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                         5),
                                                             color: Colors.white,
                                                           ),
-                                                          child: Center(
+                                                      child: Center(
                                                             child: Text(
                                                               isApplicationFull
                                                                   ? 'Unavailable'
@@ -718,11 +713,11 @@ class _ProfilePageState extends State<ProfilePage> {
         await Provider.of<PostsProvider>(context, listen: false)
             .addComment(comment, postId);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Comment added successfully')),
+          SnackBar(content: Text('Comment added successfully', style: CustomTextStyle.regularText.copyWith(fontSize: responsiveSize(context, 0.04)),)),
         );
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to add comment: $e')),
+          SnackBar(content: Text('Failed to add comment: $e',style: CustomTextStyle.regularText.copyWith(fontSize: responsiveSize(context, 0.04)), )),
         );
       }
     }
@@ -760,19 +755,18 @@ class _ProfilePageState extends State<ProfilePage> {
         if (snapshot.hasData) {
           final userData = snapshot.data!.data() as Map<String, dynamic>;
           final rating = userData['rating'] ?? 0;
-          final ratingCount = userData['ratingCount'] ?? 0;
 
-          return SingleChildScrollView(
-            padding: const EdgeInsets.all(10.0),
-            child: Container(
-              height: MediaQuery.of(context).size.height - 200,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  RatingBar(
+          showRatingDialog() {
+            showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  backgroundColor: Color.fromARGB(255, 7, 30, 47),
+                  title: Text('Rate this user', style: CustomTextStyle.semiBoldText.copyWith(fontSize: responsiveSize(context, 0.04)),),
+                  content: RatingBar(
                     initialRating: rating.toDouble(),
                     direction: Axis.horizontal,
-                    allowHalfRating: true,
+                    allowHalfRating: false,
                     itemCount: 5,
                     ratingWidget: RatingWidget(
                       full: Icon(Icons.star, color: Colors.orange),
@@ -781,16 +775,31 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     onRatingUpdate: (rating) async {
                       await updateRating(rating, ratedUserId);
+                      Navigator.of(context).pop();
                     },
                   ),
-                  Text(
-                    'Your Rating: $rating',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  // Text(
-                  //   'Number of ratings: $ratingCount',
-                  //   style: TextStyle(fontSize: 16),
-                  // ),
+                );
+              },
+            );
+          }
+
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(10.0),
+            child: Container(
+              height: MediaQuery.of(context).size.height - 200,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Details',
+                      style: CustomTextStyle.typeRegularText.copyWith(
+                          fontWeight: FontWeight.bold,
+                          fontSize: responsiveSize(context, 0.04))),
+                  const SizedBox(height: 10),
+                  buildResumeItem('Name', userData['firstName'] ?? ''),
+                  buildResumeItem(
+                      'Contact Number', userData['phoneNumber'] ?? ''),
+                  buildResumeItem('Sex', userData['sex'] ?? ''),
+                  buildResumeItem('Address', userData['address'] ?? ''),
                   StreamBuilder(
                     stream: FirebaseFirestore.instance
                         .collection('users')
@@ -799,36 +808,55 @@ class _ProfilePageState extends State<ProfilePage> {
                         .snapshots(),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
-                        return ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: 5,
-                          itemBuilder: (context, index) {
-                            final rating = 5 - index;
-                            final ratingCount =
-                                snapshot.data!.docs.where((doc) {
-                              final ratingValue = doc.data()['stars'];
-                              return ratingValue.toInt() == rating;
-                            }).length;
+                        final ratings = snapshot.data!.docs;
+                        final rating = ratings.isEmpty
+                            ? 0
+                            : ratings
+                                    .map((doc) => doc.data()['stars'])
+                                    .reduce((a, b) => a + b) /
+                                ratings.length;
 
-                            return ListTile(
-                              title: Text(
-                                '$rating stars ($ratingCount)',
-                                style: TextStyle(fontSize: 16),
-                              ),
-                            );
-                          },
+                        return Column(
+                          children: [
+                            Text('Ratings',
+                                style: CustomTextStyle.typeRegularText.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: responsiveSize(context, 0.04))),
+                            const SizedBox(height: 10),
+                            ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: 5,
+                              itemBuilder: (context, index) {
+                                final rating = 5 - index;
+                                final ratingCount = ratings.where((doc) {
+                                  final ratingValue = doc.data()['stars'];
+                                  return ratingValue.toInt() == rating;
+                                }).length;
+
+                                return ListTile(
+                                  title: Text(
+                                    '$rating stars ($ratingCount)',
+                            
+                                    style: CustomTextStyle.regularText.copyWith(fontSize: responsiveSize(context, 0.04))),
+                                  
+                                );
+                              },
+                            ),
+                            Text('Average Rating: $rating',style: CustomTextStyle.semiBoldText, ),
+                            const SizedBox(height: 10),
+
+                            CustomButton(
+  onPressed: showRatingDialog,
+  buttonText: 'Rate this user',
+
+),
+                          ],
                         );
                       } else {
-                        return const Center(child: CircularProgressIndicator());
+                        return const Center(child: CircularProgressIndicator(color: Colors.white));
                       }
                     },
                   ),
-                  const SizedBox(height: 20),
-                  buildResumeItem('Name', userData['firstName'] ?? ''),
-                  buildResumeItem(
-                      'Contact Number', userData['phoneNumber'] ?? ''),
-                  buildResumeItem('Sex', userData['sex'] ?? ''),
-                  buildResumeItem('Address', userData['address'] ?? ''),
                 ],
               ),
             ),
@@ -844,6 +872,23 @@ class _ProfilePageState extends State<ProfilePage> {
     try {
       final ratedUserRef =
           FirebaseFirestore.instance.collection('users').doc(ratedUserId);
+      final ratingsRef = ratedUserRef.collection('ratings');
+
+      await ratingsRef
+          .where('raterId', isEqualTo: widget.userId)
+          .get()
+          .then((querySnapshot) {
+        querySnapshot.docs.forEach((doc) {
+          ratingsRef.doc(doc.id).delete();
+        });
+      });
+
+      await ratingsRef.add({
+        'stars': rating,
+        'raterId': widget.userId,
+        'timestamp': FieldValue.serverTimestamp(),
+      });
+
       final ratedUserData =
           (await ratedUserRef.get()).data() as Map<String, dynamic>?;
       if (ratedUserData != null) {
@@ -853,7 +898,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
           await ratedUserRef.update({
             'totalRating': totalRating + rating - ratedUserData['rating'],
-            'ratingCount': ratingCount + 1,
+            'ratingCount': ratingCount,
             'rating': rating,
           });
         } else {
@@ -863,11 +908,6 @@ class _ProfilePageState extends State<ProfilePage> {
             'rating': rating,
           });
         }
-
-        await ratedUserRef.collection('ratings').add({
-          'stars': rating,
-          'timestamp': FieldValue.serverTimestamp(),
-        });
       }
     } catch (e) {
       print('Error updating rating: $e');
@@ -882,15 +922,15 @@ class _ProfilePageState extends State<ProfilePage> {
           children: [
             TextSpan(
               text: '$title: ',
-              style: CustomTextStyle.regularText.copyWith(
-                fontWeight: FontWeight.bold,
-                fontSize: responsiveSize(context, 0.03),
+              style: CustomTextStyle.semiBoldText.copyWith(
+               
+                fontSize: responsiveSize(context, 0.04),
               ),
             ),
             TextSpan(
               text: content,
               style: CustomTextStyle.regularText.copyWith(
-                fontSize: responsiveSize(context, 0.03),
+                fontSize: responsiveSize(context, 0.04),
               ),
             ),
           ],

@@ -1,9 +1,12 @@
 import 'package:bluejobs/jobhunter_screens/details_view.dart';
 import 'package:bluejobs/provider/notifications/notifications_provider.dart';
 import 'package:bluejobs/provider/posts_provider.dart';
+import 'package:bluejobs/styles/responsive_utils.dart';
+import 'package:bluejobs/styles/textstyle.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
 
 class ApplicantsPage extends StatefulWidget {
   final String jobId;
@@ -30,99 +33,165 @@ class _ApplicantsPageState extends State<ApplicantsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Applicants'),
+       // backgroundColor: Color.fromARGB(255, 7, 30, 47),
+        leading: BackButton(color: const Color.fromARGB(255, 0, 0, 0)),
+        title: Text(
+          'Applicants',
+          style: CustomTextStyle.semiBoldText
+              .copyWith(fontSize: responsiveSize(context, 0.04)),
+        ),
       ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: _applicantsStream,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          if (snapshot.hasError) {
-            return Center(
-              child: Text("Error: ${snapshot.error}"),
-            );
-          }
-          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return const Center(
-              child: Text("No applicants"),
-            );
-          }
+      body: Container(
+       // color: Color.fromARGB(255, 7, 30, 47),
+        child: StreamBuilder<QuerySnapshot>(
+            stream: _applicantsStream,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              if (snapshot.hasError) {
+                return Center(
+                  child: Text("Error: ${snapshot.error}", style: CustomTextStyle.regularText
+                        .copyWith(fontSize: responsiveSize(context, 0.04)),),
+                );
+              }
+              if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                return Center(
+                  child: Text(
+                    "No applicants",
+                    style: CustomTextStyle.regularText
+                        .copyWith(fontSize: responsiveSize(context, 0.04)),
+                  ),
+                );
+              }
 
-          final applicants = snapshot.data!.docs;
+              final applicants = snapshot.data!.docs;
 
-          return Column(
-            children: [
-              Expanded(
-                child: ListView.builder(
-                  itemCount: applicants.length,
-                  itemBuilder: (context, index) {
-                    final applicant = applicants[index];
 
-                    String applicantName = applicant['applicantName'];
-                    String applicantPhone = applicant['applicantPhone'];
-                    String applicantId = applicant['idOfApplicant'];
-                    bool isHired = applicant['isHired'] ?? false;
+              return Column(
+                children: [
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: applicants.length,
+                      itemBuilder: (context, index) {
+                        final applicant = applicants[index];
 
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Card(
-                        child: ListTile(
-                          title: Text(applicantName),
-                          subtitle: Text(applicantPhone),
-                          trailing: ElevatedButton(
-                            onPressed: isHired
-                                ? null
-                                : () {
-                                    _hireApplicant(applicantId);
-                                  },
-                            child: Text(isHired ? 'Hired' : 'Hire'),
-                          ),
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => JobHunterResumeView(
-                                    userId: applicant['idOfApplicant']),
+                        String applicantName = applicant['applicantName'];
+                        String applicantPhone = applicant['applicantPhone'];
+                        String applicantId = applicant['idOfApplicant'];
+                        bool isHired = applicant['isHired'] ?? false;
+
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Card(
+                           // color: Color.fromARGB(255, 7, 30, 47),
+                            shape: RoundedRectangleBorder(
+                              side: BorderSide(color: Colors.white),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            elevation: 4.0,
+                            margin:
+                                const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
+                            child: ListTile(
+                              title: Text(
+                                applicantName,
+                                style: CustomTextStyle.semiBoldText.copyWith(
+                                    fontSize: responsiveSize(context, 0.04)),
                               ),
-                            );
-                          },
-                          onLongPress: () {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: const Text('Confirm Deletion'),
-                                  content: const Text(
-                                      'Are you sure you want to remove this applicant?'),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      child: const Text('Cancel'),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
+                              subtitle: Text(
+                                applicantPhone,
+                                style: CustomTextStyle.regularText.copyWith(
+                                    fontSize: responsiveSize(context, 0.04)),
+                              ),
+                              trailing: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color.fromARGB(255, 243, 107, 4),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  minimumSize: const Size(0, 53),
+                                ),
+                                onPressed: isHired
+                                    ? null
+                                    : () {
+                                        _hireApplicant(applicantId);
                                       },
+                                child: Text(
+                                  isHired ? 'Hired' : 'Hire',
+                                  style: CustomTextStyle.semiBoldText.copyWith(
+                                      fontSize: responsiveSize(context, 0.04)),
+                                ),
+                              ),
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => JobHunterResumeView(
+                                      userId: applicant['idOfApplicant'],
                                     ),
-                                    TextButton(
-                                        child: const Text('Delete'),
-                                        onPressed: () {
-                                          _deleteApplicant(applicantId);
-                                        }),
-                                  ],
+                                  ),
                                 );
                               },
-                            );
-                          },
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
-          );
-        },
+                              onLongPress: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text(
+                                        'Confirm Deletion',
+                                        style: CustomTextStyle.regularText
+                                            .copyWith(
+                                                fontSize: responsiveSize(
+                                                    context, 0.04)),
+                                      ),
+                                      content: Text(
+                                        'Are you sure you want to remove this applicant?',
+                                        style: CustomTextStyle.regularText
+                                            .copyWith(
+                                                fontSize: responsiveSize(
+                                                    context, 0.04)),
+                                      ),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          child: Text(
+                                            'Cancel',
+                                            style: CustomTextStyle.regularText
+                                                .copyWith(
+                                                    fontSize: responsiveSize(
+                                                        context, 0.04)),
+                                          ),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                        TextButton(
+                                          child: Text(
+                                            'Delete',
+                                            style: CustomTextStyle.regularText
+                                                .copyWith(
+                                                    fontSize: responsiveSize(
+                                                        context, 0.04)),
+                                          ),
+                                          onPressed: () {
+                                            _deleteApplicant(applicantId);
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              );
+            }),
       ),
     );
   }

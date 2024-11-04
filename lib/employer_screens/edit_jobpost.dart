@@ -2,6 +2,7 @@ import 'package:bluejobs/model/posts_model.dart';
 import 'package:bluejobs/navigation/employer_navigation.dart';
 import 'package:bluejobs/provider/mapping/location_service.dart';
 import 'package:bluejobs/provider/posts_provider.dart';
+import 'package:bluejobs/styles/custom_button.dart';
 import 'package:bluejobs/styles/custom_theme.dart';
 import 'package:bluejobs/styles/responsive_utils.dart';
 import 'package:bluejobs/styles/textstyle.dart';
@@ -174,226 +175,278 @@ class _JobEditPostState extends State<JobEditPost> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
+
+
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      leading: BackButton(color: const Color.fromARGB(255, 0, 0, 0),),
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+    ),
+    body: Container(
+      color: const Color.fromARGB(255, 255, 255, 255),
+      child: _isLoading
+          ? const Center(child: CircularProgressIndicator(color: Color.fromARGB(255, 7, 30, 47),))
           : Padding(
               padding: const EdgeInsets.all(16.0),
               child: SingleChildScrollView(
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 20),
-                      Text(
-                        'Edit Job Post',
-                        style: CustomTextStyle.semiBoldText.copyWith(
-                          color: Colors.black,
-                          fontSize: responsiveSize(context, 0.07),
-                        ),
-                      ),
-                      const SizedBox(height: 30),
-                      TextFormField(
-                        controller: _titleController,
-                        focusNode: _titleFocusNode,
-                        decoration: customInputDecoration('Title'),
-                        maxLines: 10,
-                        minLines: 1,
-                        keyboardType: TextInputType.multiline,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter the title';
-                          }
-                          return null;
-                        },
-                      ),
-                      if (_isTitleFocused)
-                        const Padding(
-                          padding: EdgeInsets.only(top: 8.0),
-                          child: Text(
-                            'Enter the title of your post.',
-                            style: TextStyle(color: Colors.grey, fontSize: 12),
+                child: Container(
+                  height: MediaQuery.of(context).size.height, // Set the height to the screen height
+                  color: const Color.fromARGB(255, 255, 255, 255),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 20),
+                        Text(
+                          'Edit Job Post',
+                          style: CustomTextStyle.semiBoldText.copyWith(
+                            
+                            fontSize: responsiveSize(context, 0.05),
                           ),
                         ),
-                      const SizedBox(height: 20),
-                      TextFormField(
-                        controller: _descriptionController,
-                        focusNode: _descriptionFocusNode,
-                        decoration: customInputDecoration('Description'),
-                        maxLines: 20,
-                        minLines: 1,
-                        keyboardType: TextInputType.multiline,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter the description';
-                          }
-                          return null;
-                        },
-                      ),
-                      if (_isDescriptionFocused)
-                        const Padding(
-                          padding: EdgeInsets.only(top: 8.0),
-                          child: Text(
-                            'Provide a detailed description.',
-                            style: TextStyle(color: Colors.grey, fontSize: 12),
-                          ),
+                        const SizedBox(height: 30),
+                       // _buildLable('Title'),
+                        _buildLabel('Title'),
+                        TextFormField(
+                          controller: _titleController,
+                          focusNode: _titleFocusNode,
+                          decoration: customInputDecoration('', ),
+                          cursorColor: Colors.white,
+                          style: CustomTextStyle.regularText.copyWith(fontSize: responsiveSize(context, 0.04)),
+                          
+                          maxLines: 10,
+                          minLines: 1,
+                          keyboardType: TextInputType.multiline,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter the title';
+                            }
+                            return null;
+                          },
                         ),
-                      const SizedBox(height: 20),
-                      TextFormField(
-                        controller: _typeController,
-                        focusNode: _typeFocusNode,
-                        decoration: customInputDecoration('Type'),
-                        maxLines: 5,
-                        minLines: 1,
-                        keyboardType: TextInputType.multiline,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter the job type';
-                          }
-                          return null;
-                        },
-                      ),
-                      if (_isTypeFocused)
-                        const Padding(
-                          padding: EdgeInsets.only(top: 8.0),
-                          child: Text(
-                            'Enter the type of job. Ex. Plumber, Electrician, etc.',
-                            style: TextStyle(color: Colors.grey, fontSize: 12),
-                          ),
-                        ),
-                      const SizedBox(height: 20),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          TextFormField(
-                            controller: _locationController,
-                            focusNode: _locationFocusNode,
-                            decoration: customInputDecoration('Location'),
-                            maxLines: 5,
-                            minLines: 1,
-                            keyboardType: TextInputType.multiline,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter the location';
-                              }
-                              return null;
-                            },
-                          ),
-                          if (_isLocationFocused)
-                            const Padding(
-                              padding: EdgeInsets.only(top: 8.0),
-                              child: Text(
-                                'Enter address Ex. Illawod Poblacion, Legazpi City, Albay',
-                                style:
-                                    TextStyle(color: Colors.grey, fontSize: 12),
-                              ),
+                        if (_isTitleFocused)
+                           Padding(
+                            padding: EdgeInsets.only(top: 8.0),
+                            child: Text(
+                              'Enter the title of your post.',
+                             // style: TextStyle(color: Colors.grey, fontSize: 12),
+                            
+                          style: CustomTextStyle.regularText.copyWith(fontSize: responsiveSize(context, 0.04)),
+                          
                             ),
-                        ],
-                      ),
-                      const SizedBox(height: 20),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 7.0),
-                              child: GestureDetector(
-                                onTap: () => _selectStartDate(context),
-                                child: AbsorbPointer(
-                                  child: TextFormField(
-                                    controller: _startDateController,
-                                    focusNode: _startDateFocusNode,
-                                    decoration: const InputDecoration(
-                                        labelText: 'Start Date',
-                                        labelStyle: CustomTextStyle.regularText,
-                                        suffixIcon: Icon(Icons.calendar_today),
-                                        hintText:
-                                            'Date when the job will start',
-                                        hintStyle: CustomTextStyle.regularText,
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Colors.grey,
-                                            width: 1,
-                                          ),
-                                        )),
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'Please enter the start date';
-                                      }
-                                      return null;
-                                    },
+                          ),
+                        const SizedBox(height: 20),
+                         _buildLabel('Description'),
+                        TextFormField(
+                          controller: _descriptionController,
+                          focusNode: _descriptionFocusNode,
+                          decoration: customInputDecoration(''),
+                           cursorColor: Colors.white,
+                          style: CustomTextStyle.regularText.copyWith(fontSize: responsiveSize(context, 0.04)),
+                          
+                          maxLines: 20,
+                          minLines: 1,
+                          keyboardType: TextInputType.multiline,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter the description';
+                            }
+                            return null;
+                          },
+                        ),
+                        if (_isDescriptionFocused)
+                           Padding(
+                            padding: EdgeInsets.only(top: 8.0),
+                            child: Text(
+                              '',
+                               
+                          style: CustomTextStyle.regularText.copyWith(fontSize: responsiveSize(context, 0.04)),
+                          
+                            ),
+                          ),
+                        const SizedBox(height: 20),
+                         _buildLabel('Type of Job'),
+                        TextFormField(
+                          controller: _typeController,
+                          focusNode: _typeFocusNode,
+                          decoration: customInputDecoration(''),
+                           cursorColor: Colors.white,
+                          style: CustomTextStyle.regularText.copyWith(fontSize: responsiveSize(context, 0.04)),
+                          
+                          maxLines: 5,
+                          minLines: 1,
+                          keyboardType: TextInputType.multiline,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter the job type';
+                            }
+                            return null;
+                          },
+                        ),
+                        if (_isTypeFocused)
+                           Padding(
+                            padding: EdgeInsets.only(top: 8.0),
+                            child: Text(
+                              'Enter the type of job. Ex. Plumber, Electrician, etc.',
+                              
+                          style: CustomTextStyle.regularText.copyWith(fontSize: responsiveSize(context, 0.04)),
+                          
+                            ),
+                          ),
+                        const SizedBox(height: 20),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                             _buildLabel('Location'),
+                            TextFormField(
+                              controller: _locationController,
+                              focusNode: _locationFocusNode,
+                              decoration: customInputDecoration(''),
+                               cursorColor: Colors.white,
+                          style: CustomTextStyle.regularText.copyWith(fontSize: responsiveSize(context, 0.04)),
+                          
+                              maxLines: 5,
+                              minLines: 1,
+                              keyboardType: TextInputType.multiline,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter the location';
+                                }
+                                return null;
+                              },
+                            ),
+                            if (_isLocationFocused)
+                            Padding(
+                                padding: EdgeInsets.only(top: 8.0),
+                                child: Text(
+                                  'Enter address Ex. Illawod Poblacion, Legazpi City, Albay',
+                                  
+                                       
+                          style: CustomTextStyle.regularText.copyWith(fontSize: responsiveSize(context, 0.04)),
+                          
+                                ),
+                              ),
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+                         _buildLabel('TStart Date'),
+                        Row(
+                          
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 7.0),
+                                child: GestureDetector(
+                                  onTap: () => _selectStartDate(context),
+                                  child: AbsorbPointer(
+
+                                    child: TextFormField(
+                                      controller: _startDateController,
+                                      focusNode: _startDateFocusNode,
+                                      decoration: customInputDecoration
+                                      ('', suffixIcon: IconButton(icon: Icon(Icons.calendar_today, color: Color.fromARGB(255, 7, 30, 47),), onPressed: () => _selectStartDate(context))
+                                      ), cursorColor: const Color.fromARGB(255, 0, 0, 0),
+                          style: CustomTextStyle.regularText.copyWith(fontSize: responsiveSize(context, 0.04)),
+                          
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return 'Please enter the start date';
+                                        }
+                                        return null;
+                                      },
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                          const SizedBox(width: 10),
-                        ],
-                      ),
-                      if (_isStartDateFormatFocused || _isEndDateFormatFocused)
-                        const Padding(
-                          padding: EdgeInsets.only(top: 8.0),
-                          child: Text(
-                            'Enter the start and end dates of the job.',
-                            style: TextStyle(color: Colors.grey, fontSize: 12),
-                          ),
+                            const SizedBox(width: 10),
+                          ],
                         ),
-                      const SizedBox(height: 20),
-                      TextFormField(
-                        controller: _workingHoursController,
-                        focusNode: _workingHoursFocusNode,
-                        decoration: customInputDecoration('Working Hours'),
-                        maxLines: 10,
-                        minLines: 1,
-                        keyboardType: TextInputType.multiline,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter the working hours';
-                          }
-                          return null;
-                        },
-                      ),
-                      if (_isWorkingHoursFocused)
-                        const Padding(
-                          padding: EdgeInsets.only(top: 8.0),
-                          child: Text(
-                            'Enter the working hours of the job. Example: 8am - 5pm',
-                            style: TextStyle(color: Colors.grey, fontSize: 12),
+                        if (_isStartDateFormatFocused || _isEndDateFormatFocused)
+                         Padding(
+                            padding: EdgeInsets.only(top: 8.0),
+                            child: Text(
+                              'Enter the start and end dates of the job.',
+                              style: CustomTextStyle.regularText.copyWith(fontSize: responsiveSize(context, 0.04))
+                            ),
                           ),
+                        const SizedBox(height: 20),
+                        _buildLabel('Working Hours'),
+                        TextFormField(
+                          controller: _workingHoursController,
+                          focusNode: _workingHoursFocusNode,
+                          decoration: customInputDecoration(''),
+                          maxLines: 10,
+                          minLines: 1,
+                          keyboardType: TextInputType.multiline,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter the working hours';
+                            }
+                            return null;
+                          },
                         ),
-                      const SizedBox(height: 20),
-                      Row(
-                        children: [
-                          ElevatedButton(
-                            onPressed: _savePost,
-                            child: const Text('Save'),
+                        if (_isWorkingHoursFocused)
+                          Padding(
+                            padding: EdgeInsets.only(top: 8.0),
+                            child: Text(
+                              'Enter the working hours of the job. Example: 8am - 5pm',
+                               
+                          style: CustomTextStyle.regularText.copyWith(fontSize: responsiveSize(context, 0.04)),
+                          
+                            ),
                           ),
-                          const SizedBox(width: 10),
-                          ElevatedButton(
-                            onPressed: () {
-                              _titleController.clear();
-                              _descriptionController.clear();
-                              _locationController.clear();
-                              _rateController.clear();
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const EmployerNavigation()));
-                            },
-                            child: const Text('Cancel'),
-                          )
-                        ],
-                      ),
-                    ],
+                        const SizedBox(height: 20),
+                        Row(
+                          children: [
+                            ElevatedButton(
+                              onPressed: _savePost,
+                              child: const Text('Save'),
+                            ),
+                            const SizedBox(width: 10),
+                            ElevatedButton(
+                              onPressed: () {
+                                _titleController.clear();
+                                _descriptionController.clear();
+                                _locationController.clear();
+                                _rateController.clear();
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const EmployerNavigation()));
+                              },
+                              child: const Text('Cancel'),
+                            )
+                          ],
+                        ),
+    
+
+
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
+          ),
     );
   }
+
+
+// Helper function to build labels
+Widget _buildLabel(String label) {
+  return Padding(
+    padding: const EdgeInsets.only(bottom: 5.0),
+    child: Text(
+      label,
+      style: CustomTextStyle.semiBoldText.copyWith(fontSize: responsiveSize(context, 0.04)),
+    ),
+  );
+}
+
 
   // update post method
   Future<void> _savePost() async {

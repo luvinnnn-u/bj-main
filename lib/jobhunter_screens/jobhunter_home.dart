@@ -6,6 +6,7 @@ import 'package:bluejobs/jobhunter_screens/find_jobs.dart';
 import 'package:bluejobs/default_screens/view_profile.dart';
 import 'package:bluejobs/provider/notifications/notifications_provider.dart';
 import 'package:bluejobs/provider/posts_provider.dart';
+import 'package:bluejobs/styles/custom_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -47,14 +48,18 @@ class _JobHunterHomePageState extends State<JobHunterHomePage> {
     final FirebaseAuth auth = FirebaseAuth.instance;
 
     return Scaffold(
-      drawer: SideBar(),
+     // drawer: SideBar(),
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 27, 74, 109),
-        leading: Builder(
-          builder: (context) => IconButton(
-            icon: const Icon(Icons.menu),
-            onPressed: () => Scaffold.of(context).openDrawer(),
-          ),
+       backgroundColor: const Color.fromARGB(255, 7, 30, 47),
+        leading: GestureDetector(
+          onTap: () {
+            _scrollController.animateTo(
+              0.0,
+              duration: const Duration(milliseconds: 500),
+              curve: Curves.easeOut,
+            );
+          },
+          child: Image.asset('assets/images/prev.png'),
         ),
         actions: <Widget>[
           Consumer<NotificationProvider>(
@@ -66,7 +71,7 @@ class _JobHunterHomePageState extends State<JobHunterHomePage> {
                     builder: (BuildContext context,
                         AsyncSnapshot<QuerySnapshot> snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return CircularProgressIndicator();
+                        return CircularProgressIndicator(color: Color.fromARGB(255, 7, 30, 47),);
                       } else if (snapshot.hasError) {
                         return Text('Error: ${snapshot.error}');
                       } else {
@@ -100,7 +105,7 @@ class _JobHunterHomePageState extends State<JobHunterHomePage> {
                                   height: 12,
                                   decoration: const BoxDecoration(
                                     shape: BoxShape.circle,
-                                    color: Colors.red,
+                                    color: Color.fromARGB(255, 243, 107, 4),
                                   ),
                                 ),
                               ),
@@ -138,9 +143,12 @@ class _JobHunterHomePageState extends State<JobHunterHomePage> {
           )
         ],
       ),
+    //  backgroundColor: const Color.fromARGB(255, 7, 30, 47),
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       body: RefreshIndicator(
         key: _refreshIndicatorKey,
         onRefresh: _refresh,
+        color: Colors.white,
         child: Column(
           children: [
             StreamBuilder<QuerySnapshot>(
@@ -153,12 +161,12 @@ class _JobHunterHomePageState extends State<JobHunterHomePage> {
                 }
                 if (snapshot.hasError) {
                   return Center(
-                    child: Text("Error: ${snapshot.error}"),
+                    child: Text("Error: ${snapshot.error}", style: CustomTextStyle.regularText.copyWith(fontSize: responsiveSize(context, 0.04)),),
                   );
                 }
                 if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                  return const Center(
-                    child: Text("No posts available"),
+                  return Center(
+                    child: Text("No posts available", style: CustomTextStyle.regularText.copyWith(fontSize: responsiveSize(context, 0.04)),),
                   );
                 }
 
@@ -185,11 +193,15 @@ class _JobHunterHomePageState extends State<JobHunterHomePage> {
                               child: Card(
                                 color: const Color.fromARGB(255, 255, 255, 255),
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5),
+                                 
+                                 side: const BorderSide(color: Colors.white),
+                                  borderRadius: BorderRadius.circular(15),
+                                  
                                 ),
                                 elevation: 4.0,
-                                margin: const EdgeInsets.fromLTRB(
-                                    0.0, 10.0, 0.0, 10.0),
+                                // margin: const EdgeInsets.fromLTRB(
+                                //     0.0, 10.0, 0.0, 10.0),
+                                 margin: const EdgeInsets.symmetric(vertical: 1.0, horizontal: 0.0), // Adju
                                 child: Padding(
                                   padding: const EdgeInsets.all(10.0),
                                   child: Column(
@@ -228,9 +240,7 @@ class _JobHunterHomePageState extends State<JobHunterHomePage> {
                                                       style: CustomTextStyle
                                                           .semiBoldText
                                                           .copyWith(
-                                                        color: const Color
-                                                            .fromARGB(
-                                                            255, 0, 0, 0),
+                                                       
                                                         fontSize:
                                                             responsiveSize(
                                                                 context, 0.04),
@@ -241,7 +251,7 @@ class _JobHunterHomePageState extends State<JobHunterHomePage> {
                                                             userId
                                                         ? IconButton(
                                                             icon: const Icon(
-                                                                Icons.message),
+                                                                Icons.message, color: Color.fromARGB(255, 7, 30, 47)),
                                                             onPressed: () {
                                                               Navigator.push(
                                                                 context,
@@ -265,7 +275,8 @@ class _JobHunterHomePageState extends State<JobHunterHomePage> {
                                               Text(
                                                 "$role",
                                                 style: CustomTextStyle
-                                                    .roleRegularText,
+                                                    .roleRegularText
+                                                    .copyWith(color: const Color.fromARGB(255, 0, 0, 0)),
                                               ),
                                             ],
                                           )
@@ -277,17 +288,22 @@ class _JobHunterHomePageState extends State<JobHunterHomePage> {
                                           ? Text(
                                               "$title",
                                               style:
-                                                  CustomTextStyle.semiBoldText,
+                                                  CustomTextStyle.semiBoldText
+                                                      .copyWith(fontSize: responsiveSize(context, 0.04)),
                                             )
                                           : Container(), // return empty 'title belongs to employer'
                                       const SizedBox(height: 5),
                                       Text(
                                         "$description",
-                                        style: CustomTextStyle.regularText,
+                                        style: CustomTextStyle.regularText
+                                            .copyWith(fontSize: responsiveSize(context, 0.04)),
                                       ),
 
                                       const SizedBox(height: 20),
+
                                       // view more, next page
+
+
                                       Padding(
                                         padding: const EdgeInsets.all(10.0),
                                         child: Row(
@@ -307,28 +323,28 @@ class _JobHunterHomePageState extends State<JobHunterHomePage> {
                                               },
                                               child: Container(
                                                 height: 53,
-                                                width: 200,
+                                                width: 335,
                                                 decoration: BoxDecoration(
+                                                  
                                                   border: Border.all(
-                                                    color: const Color.fromARGB(
-                                                        255, 7, 30, 47),
+                                                    
+                                                    color: Color.fromARGB(255, 243, 107, 4),
                                                     width: 2,
                                                   ),
                                                   borderRadius:
-                                                      BorderRadius.circular(5),
-                                                  color: Colors.white,
+                                                      BorderRadius.circular(15),
+                                                  
+                                                  color: Color.fromARGB(255, 243, 107, 4),
                                                 ),
                                                 child: Center(
                                                   child: Text(
                                                     'View More Details',
                                                     style: CustomTextStyle
-                                                        .regularText
+                                                        .semiBoldText
                                                         .copyWith(
-                                                      color:
-                                                          const Color.fromARGB(
-                                                              255, 0, 0, 0),
+                                                      color: Colors.white,
                                                       fontSize: responsiveSize(
-                                                          context, 0.03),
+                                                          context, 0.04),
                                                     ),
                                                   ),
                                                 ),
@@ -337,11 +353,15 @@ class _JobHunterHomePageState extends State<JobHunterHomePage> {
                                           ],
                                         ),
                                       ),
+
+  
                                     ],
                                   ),
                                 ),
                               ),
                             )
+
+                            
                           : Container();
                     },
                   ),
@@ -353,30 +373,6 @@ class _JobHunterHomePageState extends State<JobHunterHomePage> {
       ),
     );
   }
-
-  // Future<bool> _checkApplicationStatus(String postId, String userId) async {
-  //   final postRef = FirebaseFirestore.instance.collection('Posts').doc(postId);
-  //   final postDoc = await postRef.get();
-  //   final applicants = postDoc.get('applicants') as List<dynamic>?;
-  //   return applicants != null && applicants.contains(userId);
-  // }
-
-  // Future<bool> _isPostAlreadySaved(String postId, String userId) async {
-  //   final savedPostsRef = FirebaseFirestore.instance
-  //       .collection('users')
-  //       .doc(userId)
-  //       .collection('saved')
-  //       .doc(postId);
-  //   final savedPostsDoc = await savedPostsRef.get();
-  //   return savedPostsDoc.exists;
-  // }
-
-  // Future<bool> _isPostUnavailable(String postId) async {
-  //   final postRef = FirebaseFirestore.instance.collection('Posts').doc(postId);
-  //   final postDoc = await postRef.get();
-  //   final isApplicationFull = postDoc.get('isApplicationFull') as bool?;
-  //   return isApplicationFull ?? false;
-  // }
 
   Future<void> _refresh() async {
     await Future.delayed(Duration(seconds: 1));

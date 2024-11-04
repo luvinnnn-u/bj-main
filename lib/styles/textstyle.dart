@@ -89,8 +89,8 @@ class CustomTextStyle {
     letterSpacing: 0.4,
     fontWeight: FontWeight.bold,
     fontFamily: 'Poppins',
-   // color: Colors.black,
-   color: Colors.white
+    color: Colors.black,
+  // color: Colors.white
   );
 
   static const TextStyle roleRegularText = TextStyle(
@@ -106,7 +106,7 @@ class CustomTextStyle {
     letterSpacing: 0.7,
     //fontWeight: FontWeight.w200,
     fontFamily: 'Poppins',
-    color: Color.fromARGB(255, 232, 140, 1),
+    color: Color.fromARGB(255, 243, 107, 4),
   );
 
   static const TextStyle chatRegularText = TextStyle(
@@ -129,14 +129,17 @@ class CustomTextStyle {
     fontSize: 14,
     letterSpacing: 0.7,
     fontFamily: 'Poppins',
-    color: Colors.white,
+    color: Colors.black,
+    //color: Colors.white,
+    //color: Colors.black,
   );
 
   static const TextStyle semiBoldText = TextStyle(
     fontSize: 14,
     letterSpacing: 0.4,
     fontFamily: 'Poppins',
-    color: Colors.white,
+   color: Colors.black,
+  //  color: Colors.white,
     fontWeight: FontWeight.bold,
   );
 

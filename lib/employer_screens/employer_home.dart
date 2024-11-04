@@ -12,6 +12,7 @@ import 'package:bluejobs/styles/textstyle.dart';
 import 'package:bluejobs/styles/responsive_utils.dart';
 import 'package:provider/provider.dart';
 
+
 class EmployerHomePage extends StatefulWidget {
   const EmployerHomePage({super.key});
 
@@ -24,18 +25,34 @@ class _EmployerHomePageState extends State<EmployerHomePage> {
       GlobalKey<RefreshIndicatorState>();
   final ScrollController _scrollController = ScrollController();
   final _commentTextController = TextEditingController();
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
+  int _postsToShow = 5;
+  bool _isLoading = false;
+  bool _isScrollAtEnd = false;
 
   void showCommentDialog(String postId, BuildContext context) {
     showDialog(
       context: context,
       builder: (dialogContext) => CommentScreen(postId: postId),
     );
+  }
+
+  void _loadMorePosts() {
+    setState(() {
+      _postsToShow += 5;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(() {
+      if (_scrollController.position.maxScrollExtent ==
+          _scrollController.position.pixels) {
+        _isScrollAtEnd = true;
+      } else {
+        _isScrollAtEnd = false;
+      }
+    });
   }
 
   @override
@@ -45,7 +62,7 @@ class _EmployerHomePageState extends State<EmployerHomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 27, 74, 109),
+        backgroundColor: const Color.fromARGB(255, 7, 30, 47),
         leading: GestureDetector(
           onTap: () {
             _scrollController.animateTo(
@@ -54,7 +71,7 @@ class _EmployerHomePageState extends State<EmployerHomePage> {
               curve: Curves.easeOut,
             );
           },
-          child: Image.asset('assets/images/bluejobs.png'),
+          child: Image.asset('assets/images/prev.png'),
         ),
         actions: <Widget>[
           Consumer<NotificationProvider>(
@@ -138,340 +155,463 @@ class _EmployerHomePageState extends State<EmployerHomePage> {
           )
         ],
       ),
-      body: RefreshIndicator(
-        key: _refreshIndicatorKey,
-        onRefresh: _refresh,
-        child: Column(
-          children: [
-            StreamBuilder<QuerySnapshot>(
-              stream: postDetails.getPostsStream(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-                if (snapshot.hasError) {
-                  return Center(
-                    child: Text("Error: ${snapshot.error}"),
-                  );
-                }
-                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                  return const Center(
-                    child: Text("No posts available"),
-                  );
-                }
+      body: Container(
+        color: const Color.fromARGB(255, 255, 255, 255),
+        // color: const Color.fromARGB(255, 212, 205, 205),
+       // color: const Color.fromARGB(255, 7, 30, 47),
+        child: RefreshIndicator(
+          key: _refreshIndicatorKey,
+          onRefresh: _refresh,
+          child: Column(
+            children: [
+              StreamBuilder<QuerySnapshot>(
+                stream: postDetails.getPostsStream(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text("Error: ${snapshot.error}"),
+                    );
+                  }
+                  if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                    return  Center(
+                      child: Text("No posts available", style: CustomTextStyle.semiBoldText.copyWith(fontSize: responsiveSize(context, 0.04)),),
+                    );
+                  }
 
-                final posts = snapshot.data!.docs;
+                  final posts = snapshot.data!.docs;
 
-                return Expanded(
-                  child: ListView.builder(
-                    controller: _scrollController,
-                    itemCount: posts.length,
-                    itemBuilder: (context, index) {
-                      final post = posts[index];
+                  return Expanded(
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: ListView.builder(
+                            controller: _scrollController,
+                            itemCount: _postsToShow < posts.length
+                                ? _postsToShow
+                                : posts.length,
+                            itemBuilder: (context, index) {
+                              final post = posts[index];
 
-                      String name = post['name'];
+                              String name = post['name'];
 
-                      String userId = post['ownerId'];
-                      String role = post['role'];
-                      String profilePic = post['profilePic'] ?? '';
-                      String title = post['title'] ?? '';
-                      String description = post['description'];
-                      String type = post['type'];
+                              String userId = post['ownerId'];
+                              String role = post['role'];
+                              String profilePic = post['profilePic'] ?? '';
+                              String title = post['title'] ?? '';
+                              String description = post['description'];
+                              String type = post['type'];
 
-                      return role == 'Job Hunter'
-                          ? Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Card(
-                                color: const Color.fromARGB(255, 255, 255, 255),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                                elevation: 4.0,
-                                margin: const EdgeInsets.fromLTRB(
-                                    0.0, 10.0, 0.0, 10.0),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          CircleAvatar(
-                                            backgroundImage:
-                                                NetworkImage(profilePic),
-                                            radius: 30.0,
-                                          ),
-                                          const SizedBox(
-                                            width: 10,
-                                          ),
-                                          Column(
+                              return role == 'Job Hunter'
+                                  ? Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Card(
+                                        // color: const Color.fromARGB(
+                                        //     255, 7, 30, 47),
+                                        color: const Color.fromARGB(255, 255, 255, 255),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                          side: const BorderSide(
+                                              color: Colors.white),
+                                        ),
+                                        elevation: 4.0,
+                                        // margin: const EdgeInsets.fromLTRB(
+                                        //     0.0, 10.0, 0.0, 10.0),
+                                         margin: const EdgeInsets.symmetric(vertical: 1.0, horizontal: 0.0),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(10.0),
+                                          child: Column(
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
-                                              GestureDetector(
-                                                onTap: () {
-                                                  Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          ProfilePage(
-                                                              userId: userId),
-                                                    ),
-                                                  );
-                                                },
-                                                child: Row(
-                                                  children: [
-                                                    Text(
-                                                      "$name",
-                                                      style: CustomTextStyle
-                                                          .semiBoldText
-                                                          .copyWith(
-                                                        color: const Color
-                                                            .fromARGB(
-                                                            255, 0, 0, 0),
-                                                        fontSize:
-                                                            responsiveSize(
-                                                                context, 0.04),
-                                                      ),
-                                                    ),
-                                                    const SizedBox(width: 1),
-                                                    auth.currentUser?.uid !=
-                                                            userId
-                                                        ? IconButton(
-                                                            icon: const Icon(
-                                                                Icons.message),
-                                                            onPressed: () {
-                                                              Navigator.push(
-                                                                context,
-                                                                MaterialPageRoute(
-                                                                  builder:
-                                                                      (context) =>
-                                                                          MessagingBubblePage(
-                                                                    receiverName:
-                                                                        name,
-                                                                    receiverId:
-                                                                        userId,
-                                                                  ),
-                                                                ),
-                                                              );
-                                                            },
-                                                          )
-                                                        : Container(),
-                                                  ],
-                                                ),
-                                              ),
-                                              Text(
-                                                "$role",
-                                                style: CustomTextStyle
-                                                    .roleRegularText,
-                                              ),
-                                            ],
-                                          )
-                                        ],
-                                      ),
-                                      const SizedBox(height: 15),
-                                      // post description
-                                      role == 'Employer'
-                                          ? Text(
-                                              "$title",
-                                              style:
-                                                  CustomTextStyle.semiBoldText,
-                                            )
-                                          : Container(), // return empty 'title belongs to employer'
-                                      const SizedBox(height: 5),
-                                      Text(
-                                        "$description",
-                                        style: CustomTextStyle.regularText,
-                                      ),
-
-                                      Text(
-                                        "Type of Job: $type",
-                                        style: CustomTextStyle.typeRegularText,
-                                      ),
-
-                                      const SizedBox(height: 20),
-                                      // comment section and like
-                                      Padding(
-                                        padding: const EdgeInsets.all(10.0),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            role == 'Job Hunter'
-                                                ? Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
+                                              Row(
+                                                children: [
+                                                  CircleAvatar(
+                                                    backgroundImage:
+                                                        NetworkImage(
+                                                            profilePic),
+                                                    radius: 30.0,
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
                                                     children: [
-                                                      InkWell(
-                                                        onTap: () async {
-                                                          final postId =
-                                                              post.id;
-                                                          final userId = auth
-                                                              .currentUser!.uid;
-
-                                                          final postDoc =
-                                                              await FirebaseFirestore
-                                                                  .instance
-                                                                  .collection(
-                                                                      'Posts')
-                                                                  .doc(postId)
-                                                                  .get();
-
-                                                          if (postDoc.exists) {
-                                                            final data = postDoc
-                                                                    .data()
-                                                                as Map<String,
-                                                                    dynamic>;
-
-                                                            if (data
-                                                                .containsKey(
-                                                                    'likes')) {
-                                                              final likes = (data[
-                                                                          'likes']
-                                                                      as List<
-                                                                          dynamic>)
-                                                                  .map((e) => e
-                                                                      as String)
-                                                                  .toList();
-
-                                                              if (likes
-                                                                  .contains(
-                                                                      userId)) {
-                                                                likes.remove(
-                                                                    userId);
-                                                              } else {
-                                                                likes.add(
-                                                                    userId);
-                                                              }
-
-                                                              await postDoc
-                                                                  .reference
-                                                                  .update({
-                                                                'likes': likes
-                                                              });
-                                                            } else {
-                                                              await postDoc
-                                                                  .reference
-                                                                  .update({
-                                                                'likes': [
-                                                                  userId
-                                                                ]
-                                                              });
-                                                            }
-                                                          }
+                                                      GestureDetector(
+                                                        onTap: () {
+                                                          Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  ProfilePage(
+                                                                      userId:
+                                                                          userId),
+                                                            ),
+                                                          );
                                                         },
                                                         child: Row(
                                                           children: [
-                                                            Icon(
-                                                              Icons
-                                                                  .thumb_up_alt_rounded,
-                                                              color: post.data() !=
-                                                                          null &&
-                                                                      (post.data() as Map<
-                                                                              String,
-                                                                              dynamic>)
-                                                                          .containsKey(
-                                                                              'likes') &&
-                                                                      ((post.data() as Map<String, dynamic>)['likes'] as List<
-                                                                              dynamic>)
-                                                                          .contains(auth
-                                                                              .currentUser!
-                                                                              .uid)
-                                                                  ? Colors.blue
-                                                                  : Colors.grey,
+                                                            Text(
+                                                              "$name",
+                                                              style: CustomTextStyle
+                                                                  .semiBoldText
+                                                                  .copyWith(
+                                                                fontSize:
+                                                                    responsiveSize(
+                                                                        context,
+                                                                        0.04),
+                                                              ),
                                                             ),
                                                             const SizedBox(
-                                                                width: 5),
-                                                            Text(
-                                                              'React (${(post.data() as Map<String, dynamic>)['likes']?.length ?? 0})',
-                                                              style: CustomTextStyle
-                                                                  .regularText,
-                                                            ),
+                                                                width: 1),
+                                                            auth.currentUser
+                                                                        ?.uid !=
+                                                                    userId
+                                                                ? IconButton(
+                                                                    icon:
+                                                                        const Icon(
+                                                                      Icons
+                                                                          .message,
+                                                                      color: Color.fromARGB(255, 7, 30, 47),
+                                                                    ),
+                                                                    onPressed:
+                                                                        () {
+                                                                      Navigator
+                                                                          .push(
+                                                                        context,
+                                                                        MaterialPageRoute(
+                                                                          builder: (context) =>
+                                                                              MessagingBubblePage(
+                                                                            receiverName:
+                                                                                name,
+                                                                            receiverId:
+                                                                                userId,
+                                                                          ),
+                                                                        ),
+                                                                      );
+                                                                    },
+                                                                  )
+                                                                : Container(),
                                                           ],
                                                         ),
                                                       ),
-                                                      const SizedBox(width: 25),
-                                                      InkWell(
-                                                        onTap: () {
-                                                          showCommentDialog(
-                                                              post.id, context);
-                                                        },
-                                                        child: FutureBuilder(
-                                                          future:
-                                                              FirebaseFirestore
-                                                                  .instance
-                                                                  .collection(
-                                                                      'Posts')
-                                                                  .doc(post.id)
-                                                                  .collection(
-                                                                      'Comments')
-                                                                  .get(),
-                                                          builder: (context,
-                                                              snapshot) {
-                                                            if (snapshot
-                                                                .hasData) {
-                                                              final commentCount =
-                                                                  snapshot
-                                                                      .data!
-                                                                      .docs
-                                                                      .length;
-                                                              return Row(
-                                                                children: [
-                                                                 const Icon(Icons
-                                                                      .comment),
-                                                                  const SizedBox(
-                                                                      width: 5),
-                                                                  Text(
-                                                                    'Comments ($commentCount)',
-                                                                    style: CustomTextStyle
-                                                                        .regularText,
-                                                                  ),
-                                                                ],
-                                                              );
-                                                            } else {
-                                                              return const Row(
-                                                                children: [
-                                                                  Icon(Icons
-                                                                      .comment),
-                                                                  SizedBox(
-                                                                      width: 5),
-                                                                  Text(
-                                                                    'Comments (0)',
-                                                                    style: CustomTextStyle
-                                                                        .regularText,
-                                                                  ),
-                                                                ],
-                                                              );
-                                                            }
-                                                          },
-                                                        ),
+                                                      Text(
+                                                        "$role",
+                                                        style: CustomTextStyle
+                                                            .regularText,
                                                       ),
-                                                      const SizedBox(
-                                                        height: 50,
-                                                      )
                                                     ],
                                                   )
-                                                : Container(),
-                                            const SizedBox(width: 5),
-                                          ],
+                                                ],
+                                              ),
+                                              const SizedBox(height: 15),
+                                              // post description
+                                              role == 'Employer'
+                                                  ? Text(
+                                                      "$title",
+                                                      style: CustomTextStyle
+                                                          .semiBoldText,
+                                                    )
+                                                  : Container(), // return empty 'title belongs to employer'
+                                              const SizedBox(height: 5),
+                                              Text(
+                                                "$description",
+                                                style:
+                                                    CustomTextStyle.regularText,
+                                              ),
+
+                                              Text(
+                                                "Type of Job: $type",
+                                                style:
+                                                    CustomTextStyle.regularText,
+                                              ),
+
+                                              const SizedBox(height: 15),
+
+                                              // comment section and like
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(1.0),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    role == 'Job Hunter'
+                                                        ? Expanded(
+                                                            child: Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                InkWell(
+                                                                  onTap:
+                                                                      () async {
+                                                                    final postId =
+                                                                        post.id;
+                                                                    final userId = auth
+                                                                        .currentUser!
+                                                                        .uid;
+
+                                                                    final postDoc = await FirebaseFirestore
+                                                                        .instance
+                                                                        .collection(
+                                                                            'Posts')
+                                                                        .doc(
+                                                                            postId)
+                                                                        .get();
+
+                                                                    if (postDoc
+                                                                        .exists) {
+                                                                      final data = postDoc
+                                                                              .data()
+                                                                          as Map<
+                                                                              String,
+                                                                              dynamic>;
+
+                                                                      if (data.containsKey(
+                                                                          'likes')) {
+                                                                        final likes = (data['likes']
+                                                                                as List<dynamic>)
+                                                                            .map((e) => e as String)
+                                                                            .toList();
+
+                                                                        if (likes
+                                                                            .contains(userId)) {
+                                                                          likes.remove(
+                                                                              userId);
+                                                                        } else {
+                                                                          likes.add(
+                                                                              userId);
+                                                                        }
+
+                                                                        await postDoc
+                                                                            .reference
+                                                                            .update({
+                                                                          'likes':
+                                                                              likes
+                                                                        });
+                                                                      } else {
+                                                                        await postDoc
+                                                                            .reference
+                                                                            .update({
+                                                                          'likes':
+                                                                              [
+                                                                            userId
+                                                                          ]
+                                                                        });
+                                                                      }
+                                                                    }
+                                                                  },
+                                                                  child: Row(
+                                                                    children: [
+                                                                      Icon(
+                                                                        Icons
+                                                                            .thumb_up_alt_rounded,
+                                                                        color: post.data() != null && (post.data() as Map<String, dynamic>).containsKey('likes') && ((post.data() as Map<String, dynamic>)['likes'] as List<dynamic>).contains(auth.currentUser!.uid)
+                                                                            ? const Color.fromARGB(
+                                                                                255,
+                                                                                243,
+                                                                                107,
+                                                                                4)
+                                                                            : const Color.fromARGB(
+                                                                                255,
+                                                                                255,
+                                                                                255,
+                                                                                255),
+                                                                      ),
+                                                                      const SizedBox(
+                                                                          width:
+                                                                              3),
+                                                                      Text(
+                                                                        'Like (${(post.data() as Map<String, dynamic>)['likes']?.length ?? 0})',
+                                                                        style: CustomTextStyle
+                                                                            .regularText,
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                                const SizedBox(
+                                                                    width: 7),
+                                                                InkWell(
+                                                                  onTap:
+                                                                      () async {
+                                                                    final postId =
+                                                                        post.id;
+                                                                    final userId = auth
+                                                                        .currentUser!
+                                                                        .uid;
+
+                                                                    final postDoc = await FirebaseFirestore
+                                                                        .instance
+                                                                        .collection(
+                                                                            'Posts')
+                                                                        .doc(
+                                                                            postId)
+                                                                        .get();
+
+                                                                    if (postDoc
+                                                                        .exists) {
+                                                                      final data = postDoc
+                                                                              .data()
+                                                                          as Map<
+                                                                              String,
+                                                                              dynamic>;
+
+                                                                      if (data.containsKey(
+                                                                          'dislikes')) {
+                                                                        final dislikes = (data['dislikes']
+                                                                                as List<dynamic>)
+                                                                            .map((e) => e as String)
+                                                                            .toList();
+
+                                                                        if (dislikes
+                                                                            .contains(userId)) {
+                                                                          dislikes
+                                                                              .remove(userId);
+                                                                        } else {
+                                                                          dislikes
+                                                                              .add(userId);
+                                                                        }
+
+                                                                        await postDoc
+                                                                            .reference
+                                                                            .update({
+                                                                          'dislikes':
+                                                                              dislikes
+                                                                        });
+                                                                      } else {
+                                                                        await postDoc
+                                                                            .reference
+                                                                            .update({
+                                                                          'dislikes':
+                                                                              [
+                                                                            userId
+                                                                          ]
+                                                                        });
+                                                                      }
+                                                                    }
+                                                                  },
+                                                                  child: Row(
+                                                                    children: [
+                                                                      Icon(
+                                                                        Icons
+                                                                            .thumb_down_alt_rounded,
+                                                                        color: post.data() != null && (post.data() as Map<String, dynamic>).containsKey('dislikes') && ((post.data() as Map<String, dynamic>)['dislikes'] as List<dynamic>).contains(auth.currentUser!.uid)
+                                                                            ? const Color.fromARGB(
+                                                                                255,
+                                                                                243,
+                                                                                107,
+                                                                                4)
+                                                                            : const Color.fromARGB(255, 7, 30, 47),
+                                                                      ),
+                                                                      const SizedBox(
+                                                                          width:
+                                                                              3),
+                                                                      Text(
+                                                                        'Dislike (${(post.data() as Map<String, dynamic>)['dislikes']?.length ?? 0})',
+                                                                        style: CustomTextStyle
+                                                                            .regularText,
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                                const SizedBox(
+                                                                    width: 7),
+                                                                InkWell(
+                                                                  onTap: () {
+                                                                    showCommentDialog(
+                                                                        post.id,
+                                                                        context);
+                                                                  },
+                                                                  child:
+                                                                      FutureBuilder(
+                                                                    future: FirebaseFirestore
+                                                                        .instance
+                                                                        .collection(
+                                                                            'Posts')
+                                                                        .doc(post
+                                                                            .id)
+                                                                        .collection(
+                                                                            'Comments')
+                                                                        .get(),
+                                                                    builder:
+                                                                        (context,
+                                                                            snapshot) {
+                                                                      if (snapshot
+                                                                          .hasData) {
+                                                                        final commentCount = snapshot
+                                                                            .data!
+                                                                            .docs
+                                                                            .length;
+                                                                        return Row(
+                                                                          children: [
+                                                                            Icon(
+                                                                              Icons.comment,
+                                                                              color: const Color.fromARGB(255, 0, 0, 0),
+                                                                            ),
+                                                                            const SizedBox(width: 5),
+                                                                            Text(
+                                                                              'Comments ($commentCount)',
+                                                                              style: CustomTextStyle.regularText,
+                                                                            ),
+                                                                          ],
+                                                                        );
+                                                                      } else {
+                                                                        return const Row(
+                                                                          children: [
+                                                                            Icon(Icons.comment,
+                                                                                color: Color.fromARGB(255, 0, 0, 0)),
+                                                                            SizedBox(width: 5),
+                                                                            Text(
+                                                                              'Comments (0)',
+                                                                              style: CustomTextStyle.regularText,
+                                                                            ),
+                                                                          ],
+                                                                        );
+                                                                      }
+                                                                    },
+                                                                  ),
+                                                                ),
+                                                                const SizedBox(
+                                                                    height: 50),
+                                                              ],
+                                                            ),
+                                                          )
+                                                        : Container(),
+                                                    const SizedBox(width: 5),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            )
-                          : Container();
-                    },
-                  ),
-                );
-              },
-            ),
-          ],
+                                    )
+                                  : Container();
+                            },
+                          ),
+                        ),
+                        if (_isScrollAtEnd && _postsToShow < posts.length)
+                          ElevatedButton(
+                            onPressed: _loadMorePosts,
+                            child: const Text('See More'),
+                          ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

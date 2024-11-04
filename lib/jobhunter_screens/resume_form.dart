@@ -1,4 +1,8 @@
 import 'dart:io';
+import 'package:bluejobs/styles/custom_button.dart';
+import 'package:bluejobs/styles/custom_theme.dart';
+import 'package:bluejobs/styles/responsive_utils.dart';
+import 'package:bluejobs/styles/textstyle.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:provider/provider.dart';
@@ -19,6 +23,7 @@ class ResumeForm extends StatefulWidget {
 class _ResumeFormState extends State<ResumeForm> {
   final _formKey = GlobalKey<FormState>();
   final _experienceDescriptionController = TextEditingController();
+ // final _workExperienceController = TextEditingController();
   final _skillsController = TextEditingController();
   String? _educationAttainment;
   String? _skillLevel;
@@ -50,8 +55,10 @@ class _ResumeFormState extends State<ResumeForm> {
     });
 
     if (widget.resumeData != null) {
-      _experienceDescriptionController.text =
-          widget.resumeData!['experienceDescription'] ?? '';
+          _experienceDescriptionController.text =
+              widget.resumeData!['experienceDescription'] ?? '';
+    //  _workExperienceController.text =
+   //       widget.resumeData!['workExperienceDescription'] ?? '';
       _skillsController.text = widget.resumeData!['skills'] ?? '';
       _educationAttainment = widget.resumeData!['educationAttainment'];
       _skillLevel = widget.resumeData!['skillLevel'];
@@ -64,6 +71,7 @@ class _ResumeFormState extends State<ResumeForm> {
   @override
   void dispose() {
     _experienceDescriptionController.dispose();
+//    _workExperienceController.dispose();
     _skillsController.dispose();
     super.dispose();
   }
@@ -101,7 +109,9 @@ class _ResumeFormState extends State<ResumeForm> {
         }
       });
     } catch (e) {
-      print('Error uploading file: $e');
+      print(
+        'Error uploading file: $e',
+      );
     }
   }
 
@@ -109,15 +119,19 @@ class _ResumeFormState extends State<ResumeForm> {
     if (_formKey.currentState!.validate()) {
       if (_policeClearanceUrl == null && _validIdUrl == null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content:
-                Text('Please upload either Police Clearance or a Valid ID.'),
+          SnackBar(
+            content: Text(
+              'Please upload either Police Clearance or a Valid ID.',
+              style: CustomTextStyle.regularText
+                  .copyWith(fontSize: responsiveSize(context, 0.04)),
+            ),
           ),
         );
         return;
       }
 
-      final experienceDescription = _experienceDescriptionController.text;
+         final experienceDescription = _experienceDescriptionController.text;
+    //  final workExperience = _workExperienceController.text;
       final skills = _skillsController.text;
 
       if (_userId != null) {
@@ -130,8 +144,8 @@ class _ResumeFormState extends State<ResumeForm> {
         if (widget.isEditMode) {
           // Update existing resume data
           await resumeRef.update({
-            "experienceDescription": experienceDescription,
-            "skills": skills,
+                  "experienceDescription": experienceDescription,
+          //  "workExperience": workExperience, 
             "educationAttainment": _educationAttainment,
             "skillLevel": _skillLevel,
             "policeClearanceUrl": _policeClearanceUrl,
@@ -141,7 +155,8 @@ class _ResumeFormState extends State<ResumeForm> {
         } else {
           // Create new resume data
           await resumeRef.set({
-            "experienceDescription": experienceDescription,
+                  "experienceDescription": experienceDescription,
+           // "workExperience": workExperience, 
             "skills": skills,
             "educationAttainment": _educationAttainment,
             "skillLevel": _skillLevel,
@@ -153,8 +168,10 @@ class _ResumeFormState extends State<ResumeForm> {
 
         // Show a success message
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Resume updated successfully'),
+          SnackBar(
+            content: Text('Resume updated successfully',
+                style: CustomTextStyle.regularText
+                    .copyWith(fontSize: responsiveSize(context, 0.04))),
           ),
         );
 
@@ -162,8 +179,10 @@ class _ResumeFormState extends State<ResumeForm> {
         Navigator.pop(context, true);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('User ID is empty'),
+          SnackBar(
+            content: Text('User ID is empty',
+                style: CustomTextStyle.regularText
+                    .copyWith(fontSize: responsiveSize(context, 0.04))),
           ),
         );
       }
@@ -175,7 +194,10 @@ class _ResumeFormState extends State<ResumeForm> {
       return TextButton(
         onPressed: () => _pickFile(type: type),
         child: Text(
-            'Upload ${type.replaceAll('_', ' ').toUpperCase()} (PDF, JPG, PNG)'),
+          'Upload ${type.replaceAll('_', ' ').toUpperCase()} (PDF, JPG, PNG)',
+          style: CustomTextStyle.semiBoldText
+              .copyWith(fontSize: responsiveSize(context, 0.04)),
+        ),
       );
     }
 
@@ -184,15 +206,22 @@ class _ResumeFormState extends State<ResumeForm> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('${type.replaceAll('_', ' ').toUpperCase()} Uploaded:'),
+        Text(
+          '${type.replaceAll('_', ' ').toUpperCase()} Uploaded:',
+          style: CustomTextStyle.regularText
+              .copyWith(fontSize: responsiveSize(context, 0.04)),
+        ),
         const SizedBox(height: 8),
         isImage
             ? Image.network(fileUrl, height: 100, width: 100, fit: BoxFit.cover)
-            : const Icon(Icons.picture_as_pdf, size: 100, color: Colors.red),
+            : const Icon(Icons.picture_as_pdf,
+                size: 100, color: Color.fromARGB(255, 243, 107, 4)),
         const SizedBox(height: 8),
         TextButton(
           onPressed: () => _pickFile(type: type),
-          child: const Text('Change File'),
+          child: Text('Change File',
+              style: CustomTextStyle.regularText
+                  .copyWith(fontSize: responsiveSize(context, 0.04))),
         ),
       ],
     );
@@ -202,107 +231,146 @@ class _ResumeFormState extends State<ResumeForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Resume Form'),
+        leading: BackButton(
+          color: const Color.fromARGB(255, 0, 0, 0),
+        ),
+        backgroundColor: Color.fromARGB(255, 255, 255, 255),
+        title: Text('Edit Resume Form',
+            style: CustomTextStyle.semiBoldText
+                .copyWith(fontSize: responsiveSize(context, 0.04))),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              TextFormField(
-                controller: _experienceDescriptionController,
-                decoration: const InputDecoration(
-                  labelText: 'Experience Description',
-                  border: OutlineInputBorder(),
-                ),
-                maxLines: 4,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your experience description';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16.0),
-              DropdownButtonFormField<String>(
-                value: _educationAttainment,
-                decoration: const InputDecoration(
-                  labelText: 'Education Attainment',
-                  border: OutlineInputBorder(),
-                ),
-                items: educationLevels
-                    .map((level) => DropdownMenuItem(
-                          value: level,
-                          child: Text(level),
-                        ))
-                    .toList(),
-                onChanged: (value) {
-                  setState(() {
-                    _educationAttainment = value;
-                  });
-                },
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please select your education level';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16.0),
-              TextFormField(
-                controller: _skillsController,
-                decoration: const InputDecoration(
-                  labelText: 'Skills',
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your skills';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16.0),
-              DropdownButtonFormField<String>(
-                value: _skillLevel,
-                decoration: const InputDecoration(
-                  labelText: 'Skill Level',
-                  border: OutlineInputBorder(),
-                ),
-                items: skillLevels
-                    .map((level) => DropdownMenuItem(
-                          value: level,
-                          child: Text(level),
-                        ))
-                    .toList(),
-                onChanged: (value) {
-                  setState(() {
-                    _skillLevel = value;
-                  });
-                },
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please select your skill level';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16.0),
-              _buildFilePreview(_policeClearanceUrl, 'police_clearance'),
-              const SizedBox(height: 16.0),
-              _buildFilePreview(_certificateUrl, 'certificate'),
-              const SizedBox(height: 16.0),
-              _buildFilePreview(_validIdUrl, 'valid_id'),
-              const SizedBox(height: 20.0),
-              ElevatedButton(
-                onPressed: _submitResume,
-                child: const Text('Save Resume'),
-              ),
-            ],
+      body: Container(
+        color: Color.fromARGB(255, 255, 255, 255),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                // TextFormField(
+                //   controller: _experienceDescriptionController,
+                //   decoration: customInputDecoration('Experience Description'),
+                //   cursorColor: Colors.white,
+
+                //   maxLines: 4,
+                //   style: CustomTextStyle.regularText, // Set text style
+                //   validator: (value) {
+                //     if (value == null || value.isEmpty) {
+                //       return 'Please enter your experience description';
+                //     }
+                //     return null;
+                //   },
+                // ),
+                // // _buildLabel('Work Experience'),
+                // // TextFormField(
+                // //   controller: _workExperienceController,
+                // //   decoration: customInputDecoration(''),
+                // //    cursorColor: Colors.white,
+                // // ),
+                // const SizedBox(height: 16.0),
+                // DropdownButtonFormField<String>(
+                //   value: _educationAttainment,
+                //   decoration:
+                //       customInputDecoration('Education Attainment').copyWith(
+                //     border: OutlineInputBorder(
+                //       borderSide: BorderSide(
+                //           color: const Color.fromARGB(255, 0, 0,
+                //               0)), // Set dropdown button border color to white
+                //     ),
+                //     filled: true,
+                //     fillColor: const Color.fromARGB(255, 255, 255,
+                //         255), // Set dropdown button background color to white
+                //   ),
+                //   style: CustomTextStyle.regularText,
+                //   items: educationLevels
+                //       .map((level) => DropdownMenuItem(
+                //             value: level,
+                //             child: Text(level,
+                //                 style: CustomTextStyle.regularText.copyWith(
+                //                     // Set item text style
+                //                     fontSize: responsiveSize(context,
+                //                         0.04) // Set item text color to white
+                //                     )),
+                //           ))
+                //       .toList(),
+                //   onChanged: (value) {
+                //     setState(() {
+                //       _educationAttainment = value;
+                //     });
+                //   },
+                //   validator: (value) {
+                //     if (value == null || value.isEmpty) {
+                //       return 'Please select your education level';
+                //     }
+                //     return null;
+                //   },
+                //   //dropdownColor: const Color.fromARGB(255, 7, 30, 47), // Set dropdown menu background color to blue
+                // ),
+                // const SizedBox(height: 16.0),
+                // TextFormField(
+                //   controller: _skillsController,
+                //   decoration: customInputDecoration('Skills'),
+                //   style: CustomTextStyle.regularText, // Set text style
+                //   validator: (value) {
+                //     if (value == null || value.isEmpty) {
+                //       return 'Please enter your skills';
+                //     }
+                //     return null;
+                //   },
+                // ),
+                // const SizedBox(height: 16.0),
+                // DropdownButtonFormField<String>(
+                //   value: _skillLevel,
+                //   decoration: customInputDecoration('Skill Level'),
+                //   style: CustomTextStyle.regularText, // Set text style
+                //   items: skillLevels
+                //       .map((level) => DropdownMenuItem(
+                //             value: level,
+                //             child: Text(level,
+                //                 style: CustomTextStyle
+                //                     .regularText), // Set item text style
+                //           ))
+                //       .toList(),
+                //   onChanged: (value) {
+                //     setState(() {
+                //       _skillLevel = value;
+                //     });
+                //   },
+                //   validator: (value) {
+                //     if (value == null || value.isEmpty) {
+                //       return 'Please select your skill level';
+                //     }
+                //     return null;
+                //   },
+                // ),
+                const SizedBox(height: 16.0),
+                _buildFilePreview(_policeClearanceUrl, 'police_clearance'),
+                const SizedBox(height: 16.0),
+                _buildFilePreview(_certificateUrl, 'certificate'),
+                const SizedBox(height: 16.0),
+                _buildFilePreview(_validIdUrl, 'valid_id'),
+                const SizedBox(height: 20.0),
+               
+                CustomButton(
+                  onPressed: _submitResume,
+                  buttonText: 'Submit Resume',
+                )
+              ],
+            ),
           ),
         ),
       ),
     );
   }
+
+  //for text putside field
+  Widget _buildLabel(String label) {
+  return Padding(
+    padding: const EdgeInsets.only(bottom: 5.0),
+    child: Text(
+      label,
+      style: CustomTextStyle.semiBoldText.copyWith(fontSize: responsiveSize(context, 0.04)),
+    ),
+  );
+}
 }

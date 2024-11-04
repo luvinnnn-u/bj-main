@@ -1,4 +1,7 @@
 import 'dart:io';
+import 'package:bluejobs/styles/custom_button.dart';
+import 'package:bluejobs/styles/responsive_utils.dart';
+import 'package:bluejobs/styles/textstyle.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
@@ -123,9 +126,9 @@ class _VerificationFormState extends State<VerificationForm> {
           _validIdUrl != null ||
           _businessPermitUrl != null)) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(
             content: Text(
-                'Please upload at least one of Police Clearance, Valid ID, or Business Permit.'),
+                'Please upload at least one of Police Clearance, Valid ID, or Business Permit.', style: CustomTextStyle.regularText.copyWith(fontSize: responsiveSize(context, 0.04)),),
           ),
         );
         return;
@@ -157,8 +160,10 @@ class _VerificationFormState extends State<VerificationForm> {
         }
 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Updated successfully'),
+
+          SnackBar(
+            backgroundColor: Color.fromARGB(255, 243, 107, 4),
+            content: Text('Updated successfully',  style: CustomTextStyle.regularText.copyWith(fontSize: responsiveSize(context, 0.04))),
           ),
         );
         Navigator.of(context).pop(true);
@@ -177,7 +182,7 @@ class _VerificationFormState extends State<VerificationForm> {
           }
         },
         child: Text(
-            'Upload ${type.replaceAll('_', ' ').toUpperCase()} (PDF, JPG, PNG)'),
+            'Upload ${type.replaceAll('_', ' ').toUpperCase()} (PDF, JPG, PNG)',  style: CustomTextStyle.semiBoldText.copyWith(fontSize: responsiveSize(context, 0.04)),),
       );
     }
 
@@ -186,7 +191,7 @@ class _VerificationFormState extends State<VerificationForm> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('${type.replaceAll('_', ' ').toUpperCase()} Uploaded:'),
+        Text('${type.replaceAll('_', ' ').toUpperCase()} Uploaded:', style: CustomTextStyle.regularText.copyWith(fontSize: responsiveSize(context, 0.04)),),
         const SizedBox(height: 8),
         isImage
             ? Image.network(fileUrl, height: 100, width: 100, fit: BoxFit.cover)
@@ -200,7 +205,7 @@ class _VerificationFormState extends State<VerificationForm> {
               _pickFile(type: type);
             }
           },
-          child: const Text('Change File'),
+          child:  Text('Change File',  style: CustomTextStyle.regularText.copyWith(fontSize: responsiveSize(context, 0.04)),),
         ),
       ],
     );
@@ -210,7 +215,7 @@ class _VerificationFormState extends State<VerificationForm> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Selfie:'),
+        Text('Selfie:' ,  style: CustomTextStyle.regularText.copyWith(fontSize: responsiveSize(context, 0.04)),),
         const SizedBox(height: 8),
         _selfieImage != null
             ? Image.file(_selfieImage!,
@@ -232,7 +237,7 @@ class _VerificationFormState extends State<VerificationForm> {
                   }
                 });
               },
-              child: const Text('Take Selfie'),
+              child:  Text('Take Selfie',  style: CustomTextStyle.semiBoldText.copyWith(fontSize: responsiveSize(context, 0.04)),),
             ),
             TextButton(
               onPressed: () async {
@@ -247,7 +252,7 @@ class _VerificationFormState extends State<VerificationForm> {
                   }
                 });
               },
-              child: const Text('Upload from Gallery'),
+              child:  Text('Upload from Gallery',  style: CustomTextStyle.regularText.copyWith(fontSize: responsiveSize(context, 0.04)),), 
             ),
           ],
         ),
@@ -259,7 +264,7 @@ class _VerificationFormState extends State<VerificationForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Verification'),
+        title: Text('Verification', style: CustomTextStyle.semiBoldText.copyWith(fontSize: responsiveSize(context, 0.04) ),),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -276,10 +281,17 @@ class _VerificationFormState extends State<VerificationForm> {
               const SizedBox(height: 16.0),
               _buildSelfiePreview(),
               const SizedBox(height: 20.0),
-              ElevatedButton(
-                onPressed: _submitCredentials,
-                child: const Text('Submit'),
-              ),
+              // ElevatedButton(
+              //   onPressed: _submitCredentials,
+              //   child: const Text('Submit'),
+              // ),
+              CustomButton(
+  onPressed: _submitCredentials,
+  buttonText: 'Submit',
+
+),
+
+              
             ],
           ),
         ),

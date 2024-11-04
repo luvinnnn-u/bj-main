@@ -2,6 +2,7 @@ import 'package:bluejobs/employer_screens/job_posts_page.dart';
 import 'package:bluejobs/model/posts_model.dart';
 import 'package:bluejobs/navigation/employer_navigation.dart';
 import 'package:bluejobs/provider/posts_provider.dart';
+import 'package:bluejobs/styles/custom_button.dart';
 import 'package:bluejobs/styles/custom_theme.dart';
 import 'package:bluejobs/styles/responsive_utils.dart';
 import 'package:bluejobs/styles/textstyle.dart';
@@ -97,236 +98,315 @@ class _CreateJobPostPageState extends State<CreateJobPostPage> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 100, left: 10.0, right: 10.0),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            const SizedBox(height: 20),
-            Text(
-              'Create Job Post',
-              style: CustomTextStyle.semiBoldText.copyWith(
-                color: Colors.black,
-                fontSize: responsiveSize(context, 0.07),
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+
+       leading: IconButton(
+          icon: const Icon(Icons.arrow_back,
+              color: Color.fromARGB(255, 0, 0, 0)),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+      
+      backgroundColor: Color.fromARGB(255, 249, 249, 249),
+    ),
+    body: Container(
+      color: Color.fromARGB(255, 255, 255, 255),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: constraints.maxHeight,
               ),
-            ),
-            const SizedBox(height: 30),
-            TextField(
-              controller: _titleController,
-              focusNode: _titleFocusNode,
-              decoration: customInputDecoration('Title'),
-              maxLines: 10,
-              minLines: 1,
-              keyboardType: TextInputType.multiline,
-            ),
-            if (_isTitleFocused)
-              const Padding(
-                padding: EdgeInsets.only(top: 8.0),
-                child: Text(
-                  'Enter the title of your post.',
-                  style: TextStyle(color: Colors.grey, fontSize: 12),
-                ),
-              ),
-            const SizedBox(height: 20),
-            TextField(
-              controller: _descriptionController,
-              focusNode: _descriptionFocusNode,
-              decoration: customInputDecoration('Description'),
-              maxLines: 20,
-              minLines: 1,
-              keyboardType: TextInputType.multiline,
-            ),
-            if (_isDescriptionFocused)
-              const Padding(
-                padding: EdgeInsets.only(top: 8.0),
-                child: Text(
-                  'Provide a detailed description.',
-                  style: TextStyle(color: Colors.grey, fontSize: 12),
-                ),
-              ),
-            const SizedBox(height: 20),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                DropdownButtonFormField(
-                  decoration: customInputDecoration('Type of Job'),
-                  focusNode: _typeFocusNode,
-                  value: _typeController.text.isEmpty
-                      ? null
-                      : _typeController.text,
-                  onChanged: (newValue) {
-                    setState(() {
-                      _typeController.text = newValue as String;
-                    });
-                  },
-                  items: [
-                    'Contractual Job',
-                    'Stay In Job',
-                    'Project Based',
-                  ].map((type) {
-                    return DropdownMenuItem(
-                      value: type,
-                      child: Text(type),
-                    );
-                  }).toList(),
-                ),
-                if (_isTypeFocused)
-                  const Padding(
-                    padding: EdgeInsets.only(top: 8.0),
-                    child: Text(
-                      'Example: Contractual, Stay In Job, Project Based',
-                      style: TextStyle(color: Colors.grey, fontSize: 12),
-                    ),
-                  ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TextField(
-                  controller: _locationController,
-                  focusNode: _locationFocusNode,
-                  decoration: customInputDecoration('Location'),
-                  maxLines: 5,
-                  minLines: 1,
-                  keyboardType: TextInputType.multiline,
-                ),
-                if (_isLocationFocused)
-                  const Padding(
-                    padding: EdgeInsets.only(top: 8.0),
-                    child: Text(
-                      'Enter address Ex. Illawod Poblacion, Legazpi City, Albay',
-                      style: TextStyle(color: Colors.grey, fontSize: 12),
-                    ),
-                  ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            Row(
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 7.0),
-                    child: GestureDetector(
-                      onTap: () => _selectStartDate(context),
-                      child: AbsorbPointer(
-                        child: TextField(
-                          controller: _startDateController,
-                          focusNode: _startDateFocusNode,
-                          decoration: const InputDecoration(
-                              labelText: 'Start Date',
-                              labelStyle: CustomTextStyle.regularText,
-                              suffixIcon: Icon(Icons.calendar_today),
-                              hintText: 'Date when the job will start',
-                              hintStyle: CustomTextStyle.regularText,
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: Colors.grey,
-                                  width: 1,
-                                ),
-                              )),
-                        ),
+              child: Padding(
+                padding: const EdgeInsets.only( left: 10.0, right: 10.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 20),
+                    Text(
+                      'Create Job Post',
+                      style: CustomTextStyle.semiBoldText.copyWith(
+                        fontSize: responsiveSize(context, 0.05),
                       ),
                     ),
-                  ),
-                ),
-              ],
-            ),
-            if (_isStartDateFormatFocused)
-              const Padding(
-                padding: EdgeInsets.only(top: 8.0),
-                child: Text(
-                  'Enter the start date of the job.',
-                  style: TextStyle(color: Colors.grey, fontSize: 12),
-                ),
-              ),
-            const SizedBox(height: 20),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                DropdownButtonFormField(
-                  decoration: customInputDecoration('Working Hours'),
-                  focusNode: _workingHoursFocusNode,
-                  value: _workingHoursController.text.isEmpty
-                      ? null
-                      : _workingHoursController.text, // initial value
-                  onChanged: (newValue) {
-                    setState(() {
-                      _workingHoursController.text = newValue as String;
-                    });
-                  },
-                  items: [
-                    '8am - 5pm',
-                    '9am - 6pm',
-                    '10am - 7pm',
-                    '7am - 3pm',
-                    '6am - 2pm',
-                    'Flexible',
-                    'Rotating Shifts',
-                    'Night Shift',
-                    'Morning Shift',
-                    'Afternoon Shift',
-                  ].map((hours) {
-                    return DropdownMenuItem(
-                      value: hours,
-                      child: Text(hours),
-                    );
-                  }).toList(),
-                ),
-                if (_isWorkingHoursFocused)
-                  const Padding(
-                    padding: EdgeInsets.only(top: 8.0),
-                    child: Text(
-                      'Enter the working hours of the job.',
-                      style: TextStyle(color: Colors.grey, fontSize: 12),
+                    const SizedBox(height: 30),
+                    _buildLabel('Title', ),
+                    TextField(
+                      controller: _titleController,
+                      focusNode: _titleFocusNode,
+                      decoration: customInputDecoration(''),
+                      cursorColor: Colors.white,
+                       style: CustomTextStyle.regularText.copyWith(
+                              fontSize: responsiveSize(context, 0.04)),
+                      maxLines: 10,
+                      minLines: 1,
+                      keyboardType: TextInputType.multiline,
                     ),
-                  ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            Row(
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    _titleController.clear();
-                    _descriptionController.clear();
-                    _locationController.clear();
-                    _typeController.clear();
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const EmployerNavigation()));
-                  },
-                  child: const Text(
-                    'Cancel',
-                    style: TextStyle(color: Colors.red, fontSize: 12),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                ElevatedButton(
-                  onPressed: () => addJobPost(context),
-                  child: const Text('Post'),
-                ),
-                const SizedBox(height: 50),
-                TextButton(
-                    child: const Text('Go to Job Posts History'),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const JobPostsPage()),
-                      );
-                    }),
-              ],
-            )
-          ],
+                    if (_isTitleFocused)
+                      Padding(
+                        padding: EdgeInsets.only(top: 8.0),
+                        child: Text(
+                          'Enter the title of your post.',
+                          style: CustomTextStyle.regularText.copyWith(
+                              fontSize: responsiveSize(context, 0.03)),
+                        ),
+                      ),
+                    const SizedBox(height: 20),
+                    _buildLabel('Description', ),
+                    TextField(
+                      controller: _descriptionController,
+                      focusNode: _descriptionFocusNode,
+                      decoration: customInputDecoration(''),
+                      cursorColor: Colors.white,
+                       style: CustomTextStyle.regularText.copyWith(
+                              fontSize: responsiveSize(context, 0.04)),
+
+                      maxLines: 20,
+                      minLines: 1,
+                      keyboardType: TextInputType.multiline,
+                    ),
+                    if (_isDescriptionFocused)
+                      Padding(
+                        padding: EdgeInsets.only(top: 8.0),
+                        child: Text(
+                          'Provide a detailed description.',
+                          style: CustomTextStyle.regularText.copyWith(
+                              fontSize: responsiveSize(context, 0.03)),
+                        ),
+                      ),
+                    const SizedBox(height: 20),
+                    _buildLabel('Type of Job', ),
+                    DropdownButtonFormField(
+                      decoration: customInputDecoration('').copyWith(
+                        suffixIcon: Icon(
+                          Icons.arrow_drop_down,
+                          color: Colors.white,
+                        ),
+                      ),
+                      focusNode: _typeFocusNode,
+                      value: _typeController.text.isEmpty
+                          ? null
+                          : _typeController.text,
+                      onChanged: (newValue) {
+                        setState(() {
+                          _typeController.text = newValue as String;
+                        });
+                      },
+                      items: [
+                        // 'Contractual Job',
+                        // 'Stay In Job',
+                        // 'Project Based',
+                       ' Full-Time Job' ,
+'Part-Time Job',
+'Freelance',
+'Temporary Job',
+'Internship',
+'Commission-Based',
+'Seasonal Job',
+
+
+                      ].map((type) {
+                        return DropdownMenuItem(
+                          value: type,
+                          child: Text(
+                            type,
+                            style: CustomTextStyle.regularText.copyWith(
+                                fontSize: responsiveSize(context, 0.04)),
+                          ),
+                        );
+                      }).toList(),
+                      //dropdownColor: Color.fromARGB(255, 7, 30, 47),
+                    ),
+                    const SizedBox(height: 20),
+
+                    _buildLabel('Location', ),
+                    TextField(
+                      controller: _locationController,
+                      focusNode: _locationFocusNode,
+                      decoration: customInputDecoration(''),
+                      cursorColor: Colors.white,
+                       style: CustomTextStyle.regularText.copyWith(
+                              fontSize: responsiveSize(context, 0.04)),
+                      maxLines: 5,
+                      minLines: 1,
+                      keyboardType: TextInputType.multiline,
+                    ),
+                    if (_isLocationFocused)
+                      Padding(
+                        padding: EdgeInsets.only(top: 8.0),
+                        child: Text(
+                          'Enter address Ex. Illawod Poblacion, Legazpi City, Albay',
+                          style: CustomTextStyle.regularText.copyWith(
+                              fontSize: responsiveSize(context, 0.03)),
+                        ),
+                      ),
+                    const SizedBox(height: 20),
+                    _buildLabel('Start Date'),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 7.0),
+                            child: GestureDetector(
+                              onTap: () => _selectStartDate(context),
+                              child: AbsorbPointer(
+                             //  child: _buildLabel('Title', ),
+                                child: TextField(
+                                  controller: _startDateController,
+                                  focusNode: _startDateFocusNode,
+                                  decoration: customInputDecoration(
+                                    '',
+                                    suffixIcon: IconButton(
+                                      icon: Icon(Icons.calendar_today, color: Color.fromARGB(255, 7, 30, 47),),
+
+                                      onPressed: () => _selectStartDate(context),
+                                    ),
+                                    
+                                  ),
+                                  cursorColor: const Color.fromARGB(255, 0, 0, 0),
+                       style: CustomTextStyle.regularText.copyWith(
+                              fontSize: responsiveSize(context, 0.04)),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+
+
+DropdownButtonFormField(
+  decoration: customInputDecoration('Working Hours').copyWith(
+    suffixIcon: Icon(
+      Icons.arrow_drop_down,
+      color: Colors.white,
+    ),
+    
+  ),
+                       style: CustomTextStyle.regularText.copyWith(
+                              fontSize: responsiveSize(context, 0.04)),
+  
+  focusNode: _workingHoursFocusNode,
+  value: _workingHoursController.text.isEmpty
+      ? null
+      : _workingHoursController.text,
+  onChanged: (newValue) {
+    setState(() {
+      _workingHoursController.text = newValue as String;
+    });
+  },
+  items: [
+    '8am - 5pm',
+    '9am - 6pm',
+    '10am - 7pm',
+    '7am - 3pm',
+    '6am - 2pm',
+    'Flexible',
+    'Rotating Shifts',
+    'Night Shift',
+    'Morning Shift',
+    'Afternoon Shift',
+  ].map((hours) {
+    return DropdownMenuItem(
+      value: hours,
+      child: Text(
+        hours,
+        style: CustomTextStyle.regularText.copyWith(
+          fontSize: responsiveSize(context, 0.04),
         ),
       ),
     );
-  }
+  }).toList(),
+  dropdownColor: Color.fromARGB(255, 7, 30, 47),
+),
+                    const SizedBox(height: 20),
+                  Column(
+  children: [
+  
+   CustomButton(
+      onPressed: () => addJobPost(context),
+      buttonText: 'Save',
+    
+    ),
+    SizedBox(height: 10),
+    OutlinedButton(
+      onPressed: () {
+        _titleController.clear();
+        _descriptionController.clear();
+        _locationController.clear();
+        _typeController.clear();
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => const EmployerNavigation()
+              ),
+        );
+      },
+      child: Text(
+        'Cancel', style: CustomTextStyle.semiBoldText.copyWith(color: Colors.orange, fontSize: responsiveSize(context, 0.04)),
+        
+      ),
+      style: OutlinedButton.styleFrom(
+        side: const BorderSide(color: Colors.white),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        minimumSize: const Size(double.infinity, 50),
+      ),
+    ),
+    const SizedBox(height: 10),
+    OutlinedButton(
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => const JobPostsPage()),
+        );
+      },
+      child: Text(
+        'Go to Job Posts History',
+       // style: const TextStyle(color: Color.fromARGB(255, 255, 165, 0)),
+       style: CustomTextStyle.semiBoldText.copyWith(color: Colors.orange, fontSize: responsiveSize(context, 0.04)),
+      ),
+      style: OutlinedButton.styleFrom(
+        side: const BorderSide(color: Colors.white),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        minimumSize: const Size(double.infinity, 50),
+      ),
+    ),
+  ],
+),
+            
+                  ]
+              )
+              ),
+            ),
+          );
+
+        },
+      ),
+    ),
+  );
+}
+
+
+
+// Helper function to build labels
+Widget _buildLabel(String label) {
+  return Padding(
+    padding: const EdgeInsets.only(bottom: 5.0),
+    child: Text(
+      label,
+      style: CustomTextStyle.semiBoldText.copyWith(fontSize: responsiveSize(context, 0.04)),
+    ),
+  );
+}
 
   void addJobPost(BuildContext context) async {
     if (_titleController.text.isNotEmpty &&

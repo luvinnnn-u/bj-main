@@ -1,8 +1,10 @@
 import 'package:bluejobs/firebase_options.dart';
 import 'package:bluejobs/provider/auth_provider.dart';
+import 'package:bluejobs/provider/education_provider.dart';
 import 'package:bluejobs/provider/notifications/notifications_provider.dart';
 import 'package:bluejobs/provider/posts_provider.dart';
 import 'package:bluejobs/provider/resetpass_provider.dart';
+import 'package:bluejobs/provider/work_experience_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:bluejobs/screens_for_auth/signin.dart';
@@ -25,15 +27,18 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => AuthProvider()),
-        ChangeNotifierProvider(create: (_) => PostsProvider()),
-        ChangeNotifierProvider(create: (_) => NotificationProvider()),
-       ChangeNotifierProvider(create: (_) => PasswordResetProvider()),
+      ChangeNotifierProvider(create: (_) => AuthProvider()),
+      ChangeNotifierProvider(create: (_) => PostsProvider()),
+      ChangeNotifierProvider(create: (_) => NotificationProvider()),
+      ChangeNotifierProvider(create: (_) => PasswordResetProvider()),
+       ChangeNotifierProvider(create: (_) => EducationProvider()) ,
+       ChangeNotifierProvider(create: (_) => WorkExperienceProvider()),
       ],
       child: MaterialApp(
         title: 'Blue Jobs',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
+          
           useMaterial3: true,
         ),
         home: const SignInPage(),

@@ -1,9 +1,16 @@
 import 'package:bluejobs/employer_screens/edit_jobpost.dart';
 import 'package:bluejobs/jobhunter_screens/edit_post.dart';
+import 'package:bluejobs/jobhunter_screens/educ.dart';
+import 'package:bluejobs/jobhunter_screens/reference.dart';
 import 'package:bluejobs/jobhunter_screens/resume_form.dart';
 import 'package:bluejobs/jobhunter_screens/saved_post.dart';
+import 'package:bluejobs/jobhunter_screens/seminar.dart';
+import 'package:bluejobs/jobhunter_screens/skillset.dart';
+import 'package:bluejobs/jobhunter_screens/workexp.dart';
+import 'package:bluejobs/provider/education_provider.dart';
 import 'package:bluejobs/provider/mapping/location_service.dart';
 import 'package:bluejobs/provider/posts_provider.dart';
+import 'package:bluejobs/provider/work_experience_provider.dart';
 import 'package:bluejobs/screens_for_auth/edit_user_information.dart';
 import 'package:bluejobs/screens_for_auth/signin.dart';
 import 'package:bluejobs/styles/custom_button.dart';
@@ -15,6 +22,9 @@ import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:provider/provider.dart';
 import 'package:bluejobs/provider/auth_provider.dart' as auth_provider;
+
+
+import 'package:webview_flutter/webview_flutter.dart';
 
 class JobHunterProfilePage extends StatefulWidget {
   const JobHunterProfilePage({super.key});
@@ -43,61 +53,14 @@ class _JobHunterProfilePageState extends State<JobHunterProfilePage> {
       length: 4,
       child: Scaffold(
         appBar: AppBar(
-            // actions: [
-            //   PopupMenuButton(
-            //     icon: const Padding(
-            //       padding: EdgeInsets.all(10.0),
-            //       child: Icon(
-            //         Icons.more_vert,
-            //         size: 35,
-            //       ),
-            //     ),
-            //     itemBuilder: (context) => [
-            //       const PopupMenuItem(
-            //         value: 'editProfile',
-            //         child: Text('Edit Profile'),
-            //       ),
-            //       const PopupMenuItem(
-            //         value: 'signOut',
-            //         child: Text('Sign Out'),
-            //       ),
-            //       const PopupMenuItem(
-            //         value: 'savedPosts',
-            //         child: Text('Saved Posts'),
-            //       ),
-            //     ],
-            //     onSelected: (value) {
-            //       if (value == 'editProfile') {
-            //         Navigator.push(
-            //           context,
-            //           MaterialPageRoute(
-            //             builder: (context) => const EditUserInformation(),
-            //           ),
-            //         );
-            //       } else if (value == 'signOut') {
-            //         userLoggedIn.userSignOut().then(
-            //               (value) => Navigator.push(
-            //                 context,
-            //                 MaterialPageRoute(
-            //                   builder: (context) => const SignInPage(),
-            //                 ),
-            //               ),
-            //             );
-            //       }
-            //       if (value == 'savedPosts') {
-            //         Navigator.push(
-            //           context,
-            //           MaterialPageRoute(
-            //             builder: (context) =>
-            //                 SavedPostsPage(userId: userLoggedIn.uid),
-            //           ),
-            //         );
-            //       }
-            //     },
-            //   )
-            // ],
-            ),
-        body: SingleChildScrollView(
+        leading: BackButton(
+          color: const Color.fromARGB(255, 0, 0, 0),
+        ),
+        backgroundColor: Color.fromARGB(255, 251, 251, 251),
+      ),
+        body: Container(
+          color: Color.fromARGB(255, 255, 255, 255), 
+        child: SingleChildScrollView(
           child: Column(
             children: [
               Padding(
@@ -113,11 +76,16 @@ class _JobHunterProfilePageState extends State<JobHunterProfilePage> {
               const SizedBox(height: 16),
               buildTabBar(),
               SizedBox(
+               
                 height: 500,
+                child: Container(
+                  color: const Color.fromARGB(255, 255, 255, 255),
                 child: buildTabBarView(),
+                ),
               ),
             ],
           ),
+        ),
         ),
       ),
     );
@@ -142,49 +110,76 @@ class _JobHunterProfilePageState extends State<JobHunterProfilePage> {
     final userLoggedIn =
         Provider.of<auth_provider.AuthProvider>(context, listen: false);
     return Center(
+      
+
       child: Column(
+        
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Text(
             "${userLoggedIn.userModel.firstName} ${userLoggedIn.userModel.middleName} ${userLoggedIn.userModel.lastName} ${userLoggedIn.userModel.suffix}",
-            style: CustomTextStyle.semiBoldText,
+            style: CustomTextStyle.semiBoldText.copyWith(fontSize: responsiveSize(context, 0.04),),
           ),
           Text(
             userLoggedIn.userModel.role,
-            style: CustomTextStyle.roleRegularText,
+            style: CustomTextStyle.regularText.copyWith(color: Color.fromARGB(255, 243, 107, 4),),
           ),
         ],
       ),
+      
     );
   }
 
-  Widget buildTabBar() => Container(
-        alignment: Alignment.center,
-        child: TabBar(
-          isScrollable: true,
-          tabs: [
-            Container(
-              width: MediaQuery.of(context).size.width / 3,
-              child: const Tab(text: 'My Posts'),
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width / 3,
-              child: const Tab(text: 'Resume'),
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width / 3,
-              child: const Tab(text: 'Applications'),
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width / 3,
-              child: const Tab(text: 'About'),
-            ),
-          ],
-          labelColor: const Color.fromARGB(255, 0, 0, 0),
-          unselectedLabelColor: const Color.fromARGB(255, 124, 118, 118),
-          labelStyle: CustomTextStyle.regularText,
+
+Widget buildTabBar() => Container(
+  color: Color.fromARGB(255, 255, 255, 255),
+  alignment: Alignment.center,
+  child: TabBar(
+    isScrollable: true,
+    indicatorColor: const Color.fromARGB(255, 7, 30, 47),// Set the indicator color to white
+    indicatorWeight: 2, // Set the indicator weight to 2
+    tabs: [
+      Container(
+        width: MediaQuery.of(context).size.width / 3,
+        child: DefaultTextStyle(
+          style: CustomTextStyle.semiBoldText,
+          child: Tab(
+            text: 'My Posts',
+          ),
         ),
-      );
+      ),
+      Container(
+        width: MediaQuery.of(context).size.width / 3,
+        child: DefaultTextStyle(
+          style: CustomTextStyle.semiBoldText,
+          child: Tab(
+            text: 'My Resume',
+          ),
+        ),
+      ),
+      Container(
+        width: MediaQuery.of(context).size.width / 3,
+        child: DefaultTextStyle(
+          style: CustomTextStyle.semiBoldText,
+          child: Tab(
+            text: 'Applied Jobs',
+          ),
+        ),
+      ),
+      Container(
+        width: MediaQuery.of(context).size.width / 3,
+        child: DefaultTextStyle(
+          style: CustomTextStyle.semiBoldText,
+          child: Tab(
+            text: 'About ',
+          ),
+        ),
+      ),
+    ],
+    labelColor: Colors.white, // Set the label color to white
+    unselectedLabelColor: const Color.fromARGB(255, 124, 118, 118), // Set the unselected label color to gray
+  ),
+);
 
   Widget buildTabBarView() => TabBarView(
         children: [
@@ -214,7 +209,7 @@ class _JobHunterProfilePageState extends State<JobHunterProfilePage> {
           }
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
             return const Center(
-              child: Text("No posts available"),
+              child: Text("No posts available", style: CustomTextStyle.regularText,),
             );
           }
 
@@ -236,9 +231,12 @@ class _JobHunterProfilePageState extends State<JobHunterProfilePage> {
                 return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Card(
-                        color: const Color.fromARGB(255, 255, 255, 255),
+                        color: const Color.fromARGB(255, 7, 30, 47),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5),
+                          side: BorderSide(
+                            color: Colors.white
+                          ),
+                          borderRadius: BorderRadius.circular(15),
                         ),
                         elevation: 4.0,
                         margin: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
@@ -265,10 +263,9 @@ class _JobHunterProfilePageState extends State<JobHunterProfilePage> {
                                             name,
                                             style: CustomTextStyle.semiBoldText
                                                 .copyWith(
-                                              color: const Color.fromARGB(
-                                                  255, 0, 0, 0),
+
                                               fontSize:
-                                                  responsiveSize(context, 0.05),
+                                                  responsiveSize(context, 0.04),
                                             ),
                                           ),
                                           Padding(
@@ -277,7 +274,7 @@ class _JobHunterProfilePageState extends State<JobHunterProfilePage> {
                                             child: Text(
                                               role,
                                               style: CustomTextStyle
-                                                  .roleRegularText,
+                                                  .regularText,
                                             ),
                                           ),
                                         ],
@@ -316,19 +313,19 @@ class _JobHunterProfilePageState extends State<JobHunterProfilePage> {
                                               },
                                               child: Text(location,
                                                   style: const TextStyle(
-                                                      color: Colors.blue)),
+                                                      color: Color.fromARGB(255, 243, 107, 4))),
                                             ),
                                           ],
                                         )
                                       : Container(),
                                   Text(
                                     "Type of Job: $type",
-                                    style: CustomTextStyle.typeRegularText,
+                                    style: CustomTextStyle.regularText,
                                   ),
                                   const SizedBox(height: 15),
                                   Row(children: [
                                     IconButton(
-                                        icon: const Icon(Icons.edit),
+                                        icon: const Icon(Icons.edit, color: Color.fromARGB(255, 243, 107, 4),),
                                         onPressed: () {
                                           if (role == 'Employer') {
                                             Navigator.push(
@@ -349,26 +346,27 @@ class _JobHunterProfilePageState extends State<JobHunterProfilePage> {
                                           }
                                         }),
                                     IconButton(
-                                        icon: const Icon(Icons.delete),
+                                        icon: const Icon(Icons.delete, color: Color.fromARGB(255, 243, 107, 4),),
                                         onPressed: () {
                                           showDialog(
                                             context: context,
                                             builder: (BuildContext context) {
                                               return AlertDialog(
-                                                title: const Text(
-                                                    'Confirm Deletion'),
-                                                content: const Text(
-                                                    'Are you sure you want to delete this post? This action cannot be undone.'),
+                                                backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+                                                title: Text(
+                                                    'Confirm Deletion', style: CustomTextStyle.semiBoldText.copyWith(fontSize: responsiveSize(context, 0.04)),),
+                                                content:  Text(
+                                                    'Are you sure you want to delete this post? This action cannot be undone.', style: CustomTextStyle.regularText.copyWith(fontSize: responsiveSize(context, 0.04)),),
                                                 actions: <Widget>[
                                                   TextButton(
-                                                    child: const Text('Cancel'),
+                                                    child:  Text('Cancel',  style: CustomTextStyle.regularText.copyWith(fontSize: responsiveSize(context, 0.04)),),
                                                     onPressed: () {
                                                       Navigator.of(context)
                                                           .pop();
                                                     },
                                                   ),
                                                   TextButton(
-                                                    child: const Text('Delete'),
+                                                    child:  Text('Delete',   style: CustomTextStyle.regularText.copyWith(color: Colors.orange, fontSize:  responsiveSize(context, 0.04)),),
                                                     onPressed: () async {
                                                       final postsProvider =
                                                           Provider.of<
@@ -403,88 +401,455 @@ class _JobHunterProfilePageState extends State<JobHunterProfilePage> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           final resumeData = snapshot.data as Map<String, dynamic>;
-          return SingleChildScrollView(
-            padding: const EdgeInsets.all(20.0),
-            child: SizedBox(
-              height: MediaQuery.of(context).size.height - 100,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Bio Data',
-                      style: CustomTextStyle.typeRegularText.copyWith(
-                          fontWeight: FontWeight.bold,
-                          fontSize: responsiveSize(context, 0.03))),
-                  const SizedBox(height: 15),
-                  buildResumeItem(
-                    'Name',
-                    "${userLoggedIn.userModel.firstName} ${userLoggedIn.userModel.middleName} ${userLoggedIn.userModel.lastName} ${userLoggedIn.userModel.suffix}",
-                  ),
-                  buildResumeItem('Sex', userLoggedIn.userModel.sex),
-                  buildResumeItem('Birthday', userLoggedIn.userModel.birthdate),
-                  buildResumeItem(
-                      'Contacts', userLoggedIn.userModel.phoneNumber),
-                  buildResumeItem('Email', userLoggedIn.userModel.email ?? ''),
-                  buildResumeItem('Address', userLoggedIn.userModel.address),
-                  const SizedBox(height: 20),
-                  // Add the resume details and uploaded files section
-                  Text('Resume Details',
-                      style: CustomTextStyle.typeRegularText.copyWith(
-                          fontWeight: FontWeight.bold,
-                          fontSize: responsiveSize(context, 0.03))),
-                  const SizedBox(height: 10),
-                  // Display the experience description
-                  Text(
-                      'Experience Description: ${snapshot.data?['experienceDescription']}'),
-                  const SizedBox(height: 10),
-                  // Display the skills
-                  Text('Skills: ${snapshot.data?['skills']}'),
-                  const SizedBox(height: 10),
-                  // Display the education attainment
-                  Text(
-                      'Education Attainment: ${snapshot.data?['educationAttainment']}'),
-                  const SizedBox(height: 10),
-                  // Display the skill level
-                  Text('Skill Level: ${snapshot.data?['skillLevel']}'),
-                  const SizedBox(height: 10),
-                  // Display the uploaded files
-                  const Text('Uploaded Files:'),
-                  const SizedBox(height: 5),
-                  Column(
-                    children: [
-                      _buildFilePreviewList(snapshot.data),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 10.0, top: 5.0),
-                    child: CustomButton(
-                      onPressed: () async {
-                        try {
-                          Map<String, dynamic>? existingResumeData =
-                              await fetchResumeData(uid!);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ResumeForm(
-                                resumeData:
-                                    existingResumeData,
-                                isEditMode: existingResumeData !=
-                                    null, 
-                              ),
-                            ),
-                          );
-                        } catch (e) {
-                          // handle error
-                        }
-                      },
-                      buttonText: 'Add/Edit Resume Details',
-                    ),
-                  )
-                ],
+
+return Scaffold(
+  backgroundColor: Color.fromARGB(255, 255, 255, 255), // Set background color for the entire page
+  body: SingleChildScrollView(
+    padding: const EdgeInsets.all(20.0),
+    child: ConstrainedBox(
+      constraints: BoxConstraints(
+        minHeight: MediaQuery.of(context).size.height,
+      ),
+      child: IntrinsicHeight(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Personal Information',
+              style: CustomTextStyle.typeRegularText.copyWith(
+                fontWeight: FontWeight.bold,
+                fontSize: responsiveSize(context, 0.04),
               ),
             ),
-          );
-        } else {
+            const SizedBox(height: 15),
+            buildResumeItem(
+              'Name',
+              "${userLoggedIn.userModel.firstName} ${userLoggedIn.userModel.middleName} ${userLoggedIn.userModel.lastName} ${userLoggedIn.userModel.suffix}",
+            ),
+            buildResumeItem('Sex', userLoggedIn.userModel.sex),
+            buildResumeItem('Birthday', userLoggedIn.userModel.birthdate),
+            buildResumeItem('Contacts', userLoggedIn.userModel.phoneNumber),
+            buildResumeItem('Email', userLoggedIn.userModel.email ?? ''),
+            buildResumeItem('Address', userLoggedIn.userModel.address),
+            const SizedBox(height: 20),
+
+            // // Resume details section
+            // Text(
+            //   'Resume Details',
+            //   style: CustomTextStyle.typeRegularText.copyWith(
+            //     fontWeight: FontWeight.bold,
+            //     fontSize: responsiveSize(context, 0.04),
+            //   ),
+            // ),
+            // const SizedBox(height: 10),
+
+            // RichText(
+            //   text: TextSpan(
+            //     children: [
+            //       TextSpan(
+            //         text: 'Experience Description: ',
+            //         style: CustomTextStyle.semiBoldText.copyWith(
+            //           fontSize: responsiveSize(context, 0.04),
+            //         ),
+            //       ),
+            //       TextSpan(
+            //         text: snapshot.data?['experienceDescription'] ?? '',
+            //         style: CustomTextStyle.regularText.copyWith(
+            //           fontSize: responsiveSize(context, 0.04),
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
+            // const SizedBox(height: 10),
+
+            // // Skills display
+            // RichText(
+            //   text: TextSpan(
+            //     children: [
+            //       TextSpan(
+            //         text: 'Skills: ',
+            //         style: CustomTextStyle.semiBoldText.copyWith(
+            //           fontSize: responsiveSize(context, 0.04),
+            //         ),
+            //       ),
+            //       TextSpan(
+            //         text: snapshot.data?['skills'] ?? '',
+            //         style: CustomTextStyle.regularText.copyWith(
+            //           fontSize: responsiveSize(context, 0.04)),
+            //       ),
+            //     ],
+            //   ),
+            // ),
+            // const SizedBox(height: 10),
+
+            // // Education attainment display
+            // RichText(
+            //   text: TextSpan(
+            //     children: [
+            //       TextSpan(
+            //         text: 'Education Attainment: ',
+            //         style: CustomTextStyle.semiBoldText.copyWith(
+            //           fontSize: responsiveSize(context, 0.04),
+            //         ),
+            //       ),
+            //       TextSpan(
+            //         text: snapshot.data?['educationAttainment'] ?? '',
+            //         style: CustomTextStyle.regularText.copyWith(
+            //           fontSize: responsiveSize(context, 0.04)),
+            //       ),
+            //     ],
+            //   ),
+            // ),
+            // const SizedBox(height: 10),
+
+            // // Skill level display
+            // RichText(
+            //   text: TextSpan(
+            //     children: [
+            //       TextSpan(
+            //         text: 'Skill Level: ',
+            //         style: CustomTextStyle.semiBoldText.copyWith(
+            //           fontSize: responsiveSize(context, 0.04)),
+            //       ),
+            //       TextSpan(
+            //         text: snapshot.data?['skillLevel'] ?? '',
+            //         style: CustomTextStyle.regularText.copyWith(
+            //           fontSize: responsiveSize(context, 0.04)),
+            //       ),
+            //     ],
+            //   ),
+            // ),
+            // const SizedBox(height: 10),
+
+
+
+
+            //educational background
+            Text(
+          'Educational Background',
+          style: CustomTextStyle.typeRegularText.copyWith(
+            fontWeight: FontWeight.bold,
+            fontSize: responsiveSize(context, 0.04),
+          ),
+        ),
+
+
+Consumer<EducationProvider>(
+  builder: (context, educationProvider, child) {
+    if (educationProvider.educations.isEmpty) {
+      return Text('No education details added.', style: CustomTextStyle.regularText.copyWith(fontSize: responsiveSize(context, 0.04)),);
+    }
+
+    return Column(
+      children: educationProvider.educations.map((education) {
+        return Card(
+          elevation: 4,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Level: ${education.level}', style: CustomTextStyle.regularText),
+                Text('School: ${education.schoolName}', style: CustomTextStyle.regularText ),
+                Text('Year Completed: ${education.yearCompleted}', style: CustomTextStyle.regularText),
+              ],
+            ),
+          ),
+        );
+      }).toList(),
+    );
+  },
+),
+const SizedBox(height: 10,),
+CustomButton(
+  onPressed: (){
+    Navigator.push(context, MaterialPageRoute(builder: (context) => EducationPage()));
+  },
+  buttonText: 'Add Educations'),
+
+const SizedBox(height: 20),
+            //trying the editing of ewan hahashaha
+
+             // // work experience section
+
+Consumer<WorkExperienceProvider>(
+  builder: (context, workExperienceProvider, child) {
+    if (workExperienceProvider.workExperiences.isEmpty) {
+      return Text('No work experiences added.', style: CustomTextStyle.regularText.copyWith(fontSize: responsiveSize(context, 0.04)),);
+    }
+
+    return Column(
+      children: workExperienceProvider.workExperiences.map((workExperience) {
+        return Card(
+          elevation: 4,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Company Name: ${workExperience.companyName}', style: CustomTextStyle.regularText),
+                Text('Position Title: ${workExperience.positionTitle}', style: CustomTextStyle.regularText),
+                Text('Duration: ${workExperience.duration}', style: CustomTextStyle.regularText),
+              ],
+            ),
+          ),
+        );
+      }).toList(),
+    );
+  },
+),
+ const SizedBox(height: 20),
+
+CustomButton(
+  onPressed: (){
+    Navigator.push(context, MaterialPageRoute(builder: (context) => WorkExpPage()));
+  },
+  buttonText: 'Add Work Experiences'),
+
+  const SizedBox(height: 20,),
+
+
+
+
+
+
+// For seminars attended
+Text(
+  'Seminars Attended',
+  style: CustomTextStyle.typeRegularText.copyWith(
+    fontWeight: FontWeight.bold,
+    fontSize: responsiveSize(context, 0.04),
+  ),
+),
+
+// Wrap the Card in a Container with a fixed width
+Container(
+  width: MediaQuery.of(context).size.width * 0.9, // Set width to 90% of screen width
+  child: Card(
+    elevation: 4, // Adjust elevation for shadow effect
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(10), // Rounded corners
+    ),
+    child: Padding(
+      padding: const EdgeInsets.all(16.0), // Padding inside the card
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 10),
+          Text(
+            'Seminar: Mental Health', // Dummy data for work experience
+            style: CustomTextStyle.regularText.copyWith(
+              fontSize: responsiveSize(context, 0.04), // Adjust font size as needed
+            ),
+          ),
+          const SizedBox(height: 5),
+          Text(
+            'Year Attended: 2019', // Dummy data for work experience
+            style: CustomTextStyle.regularText.copyWith(
+              fontSize: responsiveSize(context, 0.04), // Adjust font size as needed
+            ),
+          ),
+          const SizedBox(height: 5),
+        ],
+      ),
+    ),
+  ),
+),
+
+const SizedBox(height: 20),
+
+CustomButton(
+  onPressed: () {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => SeminarAttendedPage()));
+  },
+  buttonText: 'Add Seminars Attended',
+),
+
+const SizedBox(height: 20,),
+
+//for skills
+
+Text(
+  'Skills ',
+  style: CustomTextStyle.typeRegularText.copyWith(
+    fontWeight: FontWeight.bold,
+    fontSize: responsiveSize(context, 0.04),
+  ),
+),
+
+// Wrap the Card in a Container with a fixed width
+Container(
+  width: MediaQuery.of(context).size.width * 0.9, // Set width to 90% of screen width
+  child: Card(
+    elevation: 4, // Adjust elevation for shadow effect
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(10), // Rounded corners
+    ),
+    child: Padding(
+      padding: const EdgeInsets.all(16.0), // Padding inside the card
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 10),
+          Text(
+            'Skill: Coding', // Dummy data for work experience
+            style: CustomTextStyle.regularText.copyWith(
+              fontSize: responsiveSize(context, 0.04), // Adjust font size as needed
+            ),
+          ),
+          const SizedBox(height: 5),
+          Text(
+            'Proficiency: Beginner', // Dummy data for work experience
+            style: CustomTextStyle.regularText.copyWith(
+              fontSize: responsiveSize(context, 0.04), // Adjust font size as needed
+            ),
+          ),
+          const SizedBox(height: 5),
+        ],
+      ),
+    ),
+  ),
+),
+
+const SizedBox(height: 20),
+
+CustomButton(
+  onPressed: () {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => SkillSetPage()));
+  },
+  buttonText: 'Add Skills',
+),
+const SizedBox(height: 20,),
+
+
+
+//for people references
+
+Text(
+  ' References ',
+  style: CustomTextStyle.typeRegularText.copyWith(
+    fontWeight: FontWeight.bold,
+    fontSize: responsiveSize(context, 0.04),
+  ),
+),
+
+// Wrap the Card in a Container with a fixed width
+Container(
+  width: MediaQuery.of(context).size.width * 0.9, // Set width to 90% of screen width
+  child: Card(
+    elevation: 4, // Adjust elevation for shadow effect
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(10), // Rounded corners
+    ),
+    child: Padding(
+      padding: const EdgeInsets.all(16.0), // Padding inside the card
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 10),
+          Text(
+            'Name: Mary Anne Armenta', // Dummy data for work experience
+            style: CustomTextStyle.regularText.copyWith(
+              fontSize: responsiveSize(context, 0.04), // Adjust font size as needed
+            ),
+          ),
+          const SizedBox(height: 5),
+          Text(
+            'Company: Joy', // Dummy data for work experience
+            style: CustomTextStyle.regularText.copyWith(
+              fontSize: responsiveSize(context, 0.04), // Adjust font size as needed
+            ),
+          ),
+          const SizedBox(height: 5),
+           Text(
+            ' Relationship: Officemate', // Dummy data for work experience
+            style: CustomTextStyle.regularText.copyWith(
+              fontSize: responsiveSize(context, 0.04), // Adjust font size as needed
+            ),
+          ),
+          const SizedBox(height: 5),
+           Text(
+            ' Contact Number: 09637077358', // Dummy data for work experience
+            style: CustomTextStyle.regularText.copyWith(
+              fontSize: responsiveSize(context, 0.04), // Adjust font size as needed
+            ),
+          ),
+          const SizedBox(height: 5),
+        ],
+      ),
+    ),
+  ),
+),
+
+const SizedBox(height: 20),
+
+CustomButton(
+  onPressed: () {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => ReferencePage()));
+  },
+  buttonText: 'Add References',
+),
+const SizedBox(height: 20,),
+
+
+
+
+
+            const SizedBox(height: 10),
+            // Uploaded files display
+            Text(
+              'Uploaded Files:',
+              style: CustomTextStyle.typeRegularText.copyWith(
+                fontWeight: FontWeight.bold,
+                fontSize: responsiveSize(context, 0.04)),
+            ),
+            const SizedBox(height: 5),
+            Column(
+              children: [
+                _buildFilePreviewList(snapshot.data),
+              ],
+            ),
+            const SizedBox(height: 20),
+
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10.0, top: 5.0),
+              child: CustomButton(
+                onPressed: () async {
+                  try {
+                    Map<String, dynamic>? existingResumeData =
+                        await fetchResumeData(uid!);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ResumeForm(
+                          resumeData: existingResumeData,
+                          isEditMode: existingResumeData != null,
+                        ),
+                      ),
+                    );
+                  } catch (e) {
+                    // handle error
+                  }
+                },
+                buttonText: 'Add/Edit Resume Details',
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  ),
+);
+
+        } 
+        else {
           return const Center(child: CircularProgressIndicator());
         }
       },
@@ -504,40 +869,112 @@ class _JobHunterProfilePageState extends State<JobHunterProfilePage> {
     }
   }
 
-  Widget _buildFilePreviewList(Map<String, dynamic>? data) {
-    if (data == null) {
-      return Text('No files uploaded');
-    }
 
-    return Column(
-      children: [
-        _buildFilePreview(data['policeClearanceUrl'], 'Police Clearance'),
-        _buildFilePreview(data['certificateUrl'], 'Certificate'),
-        _buildFilePreview(data['validIdUrl'], 'Valid ID'),
-      ],
-    );
+Widget _buildFilePreviewList(Map<String, dynamic>? data) {
+  if (data == null) {
+    return Text('No files uploaded',   style: CustomTextStyle.typeRegularText.copyWith(
+                        fontWeight: FontWeight.bold,
+                        fontSize: responsiveSize(context, 0.04)));
   }
 
-  Widget _buildFilePreview(String? url, String label) {
-    if (url == null) {
-      return Text('$label: Not uploaded');
-    }
+  return Column(
+    children: [
+      _buildFilePreview(data['policeClearanceUrl'], 'Police Clearance'),
+      const SizedBox(height: 10),
+      _buildFilePreview(data['certificateUrl'], 'Certificate'),
+      const SizedBox(height: 10),
+      _buildFilePreview(data['validIdUrl'], 'Valid ID'),
+    ],
+  );
+}
 
-    return Row(
-      children: [
-        Text(label),
-        const SizedBox(width: 10),
-        url != null
-            ? Image.network(
-                url,
-                width: 100,
-                height: 100, 
-                fit: BoxFit.contain, 
-              )
-            : Container(), 
-      ],
-    );
-  }
+
+
+
+Widget _buildFilePreview(String? url, String label) {
+  return SizedBox(
+    width: MediaQuery.of(context).size.width * 0.90,
+    height: 50,
+    child: CustomButton(
+      onPressed: () {
+        _showFilePreviewModal(url, label);
+      },
+      buttonText: label,
+      isLoading: false,
+      buttonColor: const Color.fromARGB(255, 7, 30, 47),
+      textColor: Color.fromARGB(255, 243, 107, 4),
+      borderColor: Colors.white,
+      borderWidth: 2,
+    ),
+  );
+}
+
+
+
+
+void _showFilePreviewModal(String? url, String label) {
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.transparent, // Set to transparent to make the modal overlay the entire page
+    builder: (context) {
+      return Container(
+        padding: const EdgeInsets.all(10),
+        height: MediaQuery.of(context).size.height * 0.7, // Modal height (70% of screen height)
+        decoration: BoxDecoration(
+          color: Color.fromARGB(255, 7, 30, 47), // Set background to your desired color
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Label at the top
+            Text(
+              label,
+              style: CustomTextStyle.semiBoldText.copyWith(
+                fontSize: responsiveSize(context, 0.04),
+                color: Colors.white, // Adjust label color if necessary
+              ),
+            ),
+            const SizedBox(height: 10),
+            
+            // Image or file preview section
+            url != null
+                ? Expanded(
+                    child: InteractiveViewer(
+                      boundaryMargin: const EdgeInsets.all(20.0),
+                      minScale: 0.5,
+                      maxScale: 4.0,
+                      child: Container(
+                        height: 300, // Set a specific height
+                        width: MediaQuery.of(context).size.width * 0.9, // 90% of screen width
+                        decoration: BoxDecoration(
+                          color: Colors.black, // Background for the image container
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Image.network(
+                          url,
+                          fit: BoxFit.contain, // Ensure the image is contained within the box
+                        ),
+                      ),
+                    ),
+                  )
+                :  Center(
+                   child: Text(
+                      'No file uploaded',
+                     style: CustomTextStyle.regularText.copyWith(fontSize: responsiveSize(context, 0.04)),
+                    ),
+                  ),
+          ],
+        ),
+      );
+    },
+  );
+}
+
 
   Widget buildSpecializationChips(List<String> skills) {
     return Wrap(
@@ -560,30 +997,35 @@ class _JobHunterProfilePageState extends State<JobHunterProfilePage> {
     );
   }
 
-  Widget buildResumeItem(String title, String content) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10.0),
-      child: RichText(
-        text: TextSpan(
-          children: [
-            TextSpan(
-              text: '$title: ',
-              style: CustomTextStyle.regularText.copyWith(
-                fontWeight: FontWeight.bold,
-                fontSize: responsiveSize(context, 0.03),
-              ),
-            ),
-            TextSpan(
-              text: content,
-              style: CustomTextStyle.regularText.copyWith(
-                fontSize: responsiveSize(context, 0.03),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+
+
+Widget buildResumeItem(String title, String? content) {
+  if (content == null) {
+    return Container(); // or some other default value
   }
+
+  return Padding(
+    padding: const EdgeInsets.only(bottom: 10.0),
+    child: RichText(
+      text: TextSpan(
+        children: [
+          TextSpan(
+            text: '$title: ',
+            style: CustomTextStyle.semiBoldText.copyWith(
+              fontSize: responsiveSize(context, 0.04),
+            ),
+          ),
+          TextSpan(
+            text: content,
+            style: CustomTextStyle.regularText.copyWith(
+              fontSize: responsiveSize(context, 0.04),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
 
   Widget buildAboutTab(BuildContext context) {
     final userLoggedIn =
@@ -599,8 +1041,8 @@ class _JobHunterProfilePageState extends State<JobHunterProfilePage> {
                 color: Color.fromARGB(255, 0, 0, 0)),
             title: Text(
               'Saved Posts',
-              style: CustomTextStyle.semiBoldText.copyWith(
-                fontSize: responsiveSize(context, 0.03),
+              style: CustomTextStyle.regularText.copyWith(
+                fontSize: responsiveSize(context, 0.04),
               ),
             ),
             onTap: () {
@@ -618,9 +1060,9 @@ class _JobHunterProfilePageState extends State<JobHunterProfilePage> {
             leading:
                 const Icon(Icons.settings, color: Color.fromARGB(255, 0, 0, 0)),
             title: Text(
-              'Settings',
-              style: CustomTextStyle.semiBoldText.copyWith(
-                fontSize: responsiveSize(context, 0.03),
+              'Edit Profile',
+              style: CustomTextStyle.regularText.copyWith(
+                fontSize: responsiveSize(context, 0.04),
               ),
             ),
             onTap: () {
@@ -637,8 +1079,8 @@ class _JobHunterProfilePageState extends State<JobHunterProfilePage> {
                 color: Color.fromARGB(255, 0, 0, 0)),
             title: Text(
               'Log Out',
-              style: CustomTextStyle.semiBoldText.copyWith(
-                fontSize: responsiveSize(context, 0.03),
+              style: CustomTextStyle.regularText.copyWith(
+                fontSize: responsiveSize(context, 0.04),
               ),
             ),
             onTap: () {
@@ -658,13 +1100,14 @@ class _JobHunterProfilePageState extends State<JobHunterProfilePage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: Color.fromARGB(255, 217, 228, 237),
+          backgroundColor: Color.fromARGB(255, 255, 255, 255),
           title: Text('Log out',
               style: CustomTextStyle.semiBoldText
-                  .copyWith(fontSize: responsiveSize(context, 0.03))),
-          content: const Text(
-            'Are you sure you want to log out?',
-            style: CustomTextStyle.semiBoldText,
+                  .copyWith(fontSize: responsiveSize(context, 0.04))),
+          content: Text(
+            'Are you sure you want to log out?' , style: CustomTextStyle.semiBoldText
+                  .copyWith(fontSize: responsiveSize(context, 0.04))
+
           ),
           actions: [
             TextButton(
@@ -699,50 +1142,60 @@ class _JobHunterProfilePageState extends State<JobHunterProfilePage> {
     );
   }
 
-  Widget buildApplicationsTab() {
-    final userLoggedIn =
-        Provider.of<auth_provider.AuthProvider>(context, listen: false);
-    final PostsProvider _postsProvider = PostsProvider();
 
-    return StreamBuilder<QuerySnapshot>(
-      stream: getApplicationsStream(userLoggedIn.uid),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
+
+Widget buildApplicationsTab() {
+  final userLoggedIn =
+      Provider.of<auth_provider.AuthProvider>(context, listen: false);
+  final PostsProvider _postsProvider = PostsProvider();
+
+  return StreamBuilder<QuerySnapshot>(
+    stream: getApplicationsStream(userLoggedIn.uid),
+    builder: (context, snapshot) {
+      if (snapshot.hasError) {
+        return Center(
+          child: Text('Error: ${snapshot.error}'),
+        );
+      }
+
+      switch (snapshot.connectionState) {
+        case ConnectionState.waiting:
           return Center(
-            child: Text('Error: ${snapshot.error}'),
+            child: CircularProgressIndicator(),
           );
-        }
+        default:
+          if (snapshot.hasData) {
+            final applicationsData = snapshot.data!.docs;
 
-        switch (snapshot.connectionState) {
-          case ConnectionState.waiting:
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          default:
-            if (snapshot.hasData) {
-              final applicationsData = snapshot.data!.docs;
+            if (applicationsData.isEmpty) {
+              return Center(
+                child: Text('No applications found.' , style: CustomTextStyle.regularText.copyWith(fontSize: responsiveSize(context, 0.04)),),
+              );
+            }
+            return ListView.builder(
+                itemCount: applicationsData.length,
+                itemBuilder: (context, index) {
+                  final applicationData =
+                      applicationsData[index].data() as Map<String, dynamic>;
 
-              if (applicationsData.isEmpty) {
-                return Center(
-                  child: Text('No applications found.'),
-                );
-              }
-              return ListView.builder(
-                  itemCount: applicationsData.length,
-                  itemBuilder: (context, index) {
-                    final applicationData =
-                        applicationsData[index].data() as Map<String, dynamic>;
-
-                    return Card(
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        side: BorderSide(color: Colors.white),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                     // color: Color.fromARGB(255, 7, 30, 47),
+                     color: Color.fromARGB(255, 255, 255, 255),
                       child: ListTile(
-                          title: Text(applicationData['jobTitle']),
+                          title: Text(applicationData['jobTitle'], style: CustomTextStyle.semiBoldText.copyWith(fontSize: responsiveSize(context, 0.04)),),
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(applicationData['jobDescription']),
+                              Text(applicationData['jobDescription'], style: CustomTextStyle.regularText.copyWith(fontSize: responsiveSize(context, 0.04)),),
                               Text(
                                   'Employer: ${applicationData['employerName']}',
-                                  style: CustomTextStyle.roleRegularText),
+                                  style: CustomTextStyle.typeRegularText),
                             ],
                           ),
                           trailing: AbsorbPointer(
@@ -766,26 +1219,28 @@ class _JobHunterProfilePageState extends State<JobHunterProfilePage> {
                                 });
                               },
                               child: Text(
-                                applicationData['status'] ? 'Hired' : 'Pending',
-                                style: TextStyle(
-                                  color: applicationData['status']
+                                applicationData['status'] == 'Hired'
+                                    ? 'Hired'
+                                    : 'Pending',
+                                style: CustomTextStyle.regularText.copyWith(
+                                  color: applicationData['status'] == 'Hired'
                                       ? Colors.green
                                       : Colors.grey,
                                 ),
                               ),
                             ),
                           )),
-                    );
-                  });
-            } else {
-              return const Center(
-                child: Text('No data available.'),
-              );
-            }
-        }
-      },
-    );
-  }
+                    ),
+                  );
+                });
+          } else {
+            return Center(
+              child: Text('No data available.', style: CustomTextStyle.regularText.copyWith(fontSize: responsiveSize(context, 0.04)), ),
+            );
+          }
+      }
+    },
+  );
 }
 
 Stream<QuerySnapshot> getApplicationsStream(String uid) {
@@ -794,4 +1249,5 @@ Stream<QuerySnapshot> getApplicationsStream(String uid) {
       .doc(uid)
       .collection('applications')
       .snapshots();
+}
 }

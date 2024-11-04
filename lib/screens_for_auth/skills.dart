@@ -1,3 +1,4 @@
+
 import 'package:bluejobs/screens_for_auth/confetti.dart';
 import 'package:bluejobs/provider/auth_provider.dart' as auth_provider;
 import 'package:bluejobs/styles/custom_button.dart';
@@ -52,6 +53,7 @@ class _ButtonSpecializationPageState extends State<ButtonSpecializationPage> {
   ];
 
   final Set<String> selectedSkills = {};
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -59,9 +61,9 @@ class _ButtonSpecializationPageState extends State<ButtonSpecializationPage> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 7, 30, 47),
+       // backgroundColor: const Color.fromARGB(255, 7, 30, 47),
       ),
-      backgroundColor: Colors.white,
+      //backgroundColor: const Color.fromARGB(255, 7, 30, 47),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -75,6 +77,7 @@ class _ButtonSpecializationPageState extends State<ButtonSpecializationPage> {
                   "Choose what you are good at!",
                   style: CustomTextStyle.semiBoldText.copyWith(
                     fontSize: responsiveSize(context, 0.05),
+                    
                   ),
                 ),
               ),
@@ -94,13 +97,13 @@ class _ButtonSpecializationPageState extends State<ButtonSpecializationPage> {
                             label: Text(
                               skill,
                               style: CustomTextStyle.regularText.copyWith(
-                                color: Colors.white,
+                                color: isSelected ? Colors.white : Colors.white,
                               ),
                             ),
                             selected: isSelected,
                             selectedColor: const Color.fromARGB(255, 7, 30, 47),
                             backgroundColor:
-                                const Color.fromARGB(255, 7, 30, 47),
+                                isSelected ? const Color.fromARGB(255, 7, 30, 47) : const Color.fromARGB(255, 7, 30, 47),
                             checkmarkColor: Colors.orange,
                             shape: RoundedRectangleBorder(
                               side: const BorderSide(color: Colors.white),
@@ -126,6 +129,10 @@ class _ButtonSpecializationPageState extends State<ButtonSpecializationPage> {
             const SizedBox(height: 10),
             CustomButton(
               onPressed: () async {
+                if (_isLoading) return;
+                setState(() {
+                  _isLoading = true;
+                });
                 if (selectedSkills.isNotEmpty) {
                   final userId = authProvider.uid;
                   if (userId != null) {
@@ -145,20 +152,23 @@ class _ButtonSpecializationPageState extends State<ButtonSpecializationPage> {
                     );
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('User ID is empty'),
+                      SnackBar(
+                        content: Text('User ID is empty', style: CustomTextStyle.regularText.copyWith(fontSize: responsiveSize(context, 0.04)),),
                       ),
                     );
                   }
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Please select at least one skill'),
+                     SnackBar(
+                      content: Text('Please select at least one skill', style: CustomTextStyle.regularText.copyWith(fontSize: responsiveSize(context, 0.04)),),
                     ),
                   );
                 }
+                setState(() {
+                  _isLoading = false;
+                });
               },
-              buttonText: 'Next',
+              buttonText: _isLoading ? ' Loading...' : 'Next',
             ),
           ],
         ),
@@ -166,3 +176,7 @@ class _ButtonSpecializationPageState extends State<ButtonSpecializationPage> {
     );
   }
 }
+
+
+
+

@@ -1,4 +1,8 @@
+
+
 import 'package:bluejobs/default_screens/view_profile.dart';
+import 'package:bluejobs/styles/responsive_utils.dart';
+import 'package:bluejobs/styles/textstyle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -142,10 +146,20 @@ class _NearWorkersState extends State<NearWorkers> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Job Opportunities Near You'),
-        actions: [
+        backgroundColor: Color.fromARGB(255, 7, 30, 47),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back,
+              color: Color.fromARGB(255, 255, 255, 255)),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        title: Text(
+          'Find Others',
+          style: CustomTextStyle.semiBoldText
+              .copyWith(fontSize: responsiveSize(context, 0.04)),
+        ),
+         actions: [
           IconButton(
-            icon: const Icon(Icons.my_location),
+            icon: const Icon(Icons.my_location, color: Colors.white,),
             onPressed: () {
               setState(() {
                 _loadUserLocation();
@@ -153,44 +167,95 @@ class _NearWorkersState extends State<NearWorkers> {
             },
           ),
         ],
-      ),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : Stack(
-              children: [
-                FlutterMap(
-                  options: MapOptions(
-                    center: _userLocation,
-                    zoom: 14.0,
-                  ),
-                  children: [
-                    TileLayer(
-                      urlTemplate:
-                          'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                      subdomains: ['a', 'b', 'c'],
-                    ),
-                    MarkerLayer(markers: _markers),
-                    MarkerLayer(
-                      markers: [
-                        Marker(
-                          point: _userLocation,
-                          child: Icon(
-                            Icons.location_on,
-                            color: Colors.blueAccent,
-                            size: 50.0,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+      ),  
+    
+//      body: _isLoading
+//       ? const Center(child: CircularProgressIndicator(color: Colors.white,))
+
+//       : Stack(
+        
+//           children: [
+//             FlutterMap(
+//               options: MapOptions(
+//                 center: _userLocation,
+//                 zoom: 14.0,
+//               ),
+//               children: [
+//                 TileLayer(
+//                   urlTemplate:
+//                       'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+//                   subdomains: ['a', 'b', 'c'],
+//                 ),
+//                 MarkerLayer(markers: _markers),
+//                 MarkerLayer(
+//                   markers: [
+//                     Marker(
+//                       point: _userLocation,
+//                       child: Icon(
+//                         Icons.location_on,
+//                         color: Colors.blueAccent,
+//                         size: 50.0,
+//                       ),
+//                     ),
+//                   ],
+//                 ),
+//               ],
+//             ),
+//           ],
+//         ),
+//   floatingActionButton: FloatingActionButton(
+//     onPressed: _loadUserLocation,
+//     child: const Icon(Icons.center_focus_strong),
+//     tooltip: 'Center Map',
+//   ),
+// );
+//   }
+// }
+
+
+  
+    backgroundColor: Color.fromARGB(255, 7, 30, 47), // Set the background color of the Scaffold
+    body: _isLoading
+        ? const Center(child: CircularProgressIndicator(color: Colors.white,))
+        : Container( // Wrap the Stack with a Container
+          height: MediaQuery.of(context).size.height - AppBar().preferredSize.height, // Set the height of the Container
+          child: Stack(
+            children: [
+              FlutterMap(
+                options: MapOptions(
+                  center: _userLocation,
+                  zoom: 14.0,
                 ),
-              ],
-            ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _loadUserLocation,
-        child: const Icon(Icons.center_focus_strong),
-        tooltip: 'Center Map',
-      ),
-    );
-  }
+                children: [
+                  TileLayer(
+                    urlTemplate:
+                        'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                    subdomains: ['a', 'b', 'c'],
+                  ),
+                  MarkerLayer(markers: _markers),
+                  MarkerLayer(
+                    markers: [
+                      Marker(
+                        point: _userLocation,
+                        child: Icon(
+                          Icons.location_on,
+                          color: Colors.blueAccent,
+                          size: 50.0,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+       floatingActionButton: FloatingActionButton(
+    onPressed: _loadUserLocation,
+    child: const Icon(Icons.center_focus_strong),
+    tooltip: 'Center Map',
+  ),
+  );
 }
+}
+   
