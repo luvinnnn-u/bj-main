@@ -241,9 +241,9 @@ class _EditPostState extends State<EditPost> {
     return Scaffold(
       appBar: AppBar(
         leading: BackButton(
-          color: Colors.white,
+          color: const Color.fromARGB(255, 7, 30, 47),
         ),
-        backgroundColor: Color.fromARGB(255, 7, 30, 47),
+     //   backgroundColor: Color.fromARGB(255, 7, 30, 47),
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -251,7 +251,7 @@ class _EditPostState extends State<EditPost> {
               height: MediaQuery.of(context)
                   .size
                   .height, // Set the height to the full height of the screen
-              color: Color.fromARGB(255, 7, 30, 47),
+            //  color: Color.fromARGB(255, 7, 30, 47),
               child: SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),

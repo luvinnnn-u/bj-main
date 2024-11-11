@@ -328,10 +328,10 @@ Widget build(BuildContext context) {
   return Scaffold(
     appBar: AppBar(
       leading: BackButton(
-            color: Colors.white,
+            color: const Color.fromARGB(255, 7, 30, 47),
             onPressed: () => Navigator.of(context).pop(),
           ),
-      backgroundColor: Color.fromARGB(255, 7, 30, 47),
+    //  backgroundColor: Color.fromARGB(255, 7, 30, 47),
       title: Text(
         'Job Opportunities Near You',
         style: CustomTextStyle.semiBoldText.copyWith(fontSize: responsiveSize(context, 0.04)),
@@ -348,7 +348,7 @@ Widget build(BuildContext context) {
       ],
     ),
     body: Container(
-      color: Color.fromARGB(255, 7, 30, 47),
+   //   color: Color.fromARGB(255, 7, 30, 47),
       child: _isLoading
           ? const Center(child: CircularProgressIndicator(color: Colors.white,))
           : Stack(

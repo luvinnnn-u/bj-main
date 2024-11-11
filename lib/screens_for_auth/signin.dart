@@ -7,11 +7,13 @@ import 'package:bluejobs/screens_for_auth/password_change.dart';
 import 'package:bluejobs/screens_for_auth/signup.dart';
 import 'package:bluejobs/styles/custom_button.dart';
 import 'package:bluejobs/styles/custom_theme.dart';
+import 'package:bluejobs/styles/customthemesignin.dart';
 import 'package:bluejobs/styles/responsive_utils.dart';
 import 'package:bluejobs/styles/textstyle.dart';
 import 'package:bluejobs/utils/responsive_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -62,21 +64,30 @@ class _SignInPageState extends State<SignInPage> {
 
               // Existing text and other UI elements
               Text(
-                'Connecting Blue Collars. One Tap at a time!',
-                style: CustomTextStyle.semiBoldText.copyWith(
+                'Connecting Blue Collars with BlueJobs.',
+                style: CustomTextStyle.semiBoldText.copyWith(color: Colors.white,
                   fontSize: responsiveSize(context, 0.04),
                 ),
-                textAlign: TextAlign.start,
+                textAlign: TextAlign.center,
+              ),
+             // SizedBox(height: responsive.verticalPadding(0.01)),
+               Text(
+                'One Tap at a time!',
+                style: CustomTextStyle.semiBoldText.copyWith(color: Colors.white,
+                  fontSize: responsiveSize(context, 0.04),
+                ),
+                textAlign: TextAlign.center,
               ),
               SizedBox(height: responsive.verticalPadding(0.02)),
 
               // Email TextField
               TextField(
                 controller: _emailController,
-                decoration: customInputDecoration('Email'),
+                decoration: customInputDecorationn('Email...'),
                 cursorColor: Colors.white,
                 style: CustomTextStyle.regularText.copyWith(
                   fontSize: responsiveSize(context, 0.04),
+                   color: Colors.white
                 ),
               ),
 
@@ -86,8 +97,9 @@ class _SignInPageState extends State<SignInPage> {
               TextField(
                 controller: _passwordController,
                 obscureText: _obscureText,
-                decoration: customInputDecoration(
+                decoration: customInputDecorationn(
                   'Password...',
+                
                   suffixIcon: IconButton(
                     icon: Icon(
                       _obscureText ? Icons.visibility : Icons.visibility_off,
@@ -103,6 +115,7 @@ class _SignInPageState extends State<SignInPage> {
                 cursorColor: Colors.white,
                 style: CustomTextStyle.regularText.copyWith(
                   fontSize: responsiveSize(context, 0.04),
+                   color: Colors.white
                 ),
               ),
 

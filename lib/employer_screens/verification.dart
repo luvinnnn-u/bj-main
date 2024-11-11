@@ -195,7 +195,7 @@ class _VerificationFormState extends State<VerificationForm> {
         const SizedBox(height: 8),
         isImage
             ? Image.network(fileUrl, height: 100, width: 100, fit: BoxFit.cover)
-            : const Icon(Icons.picture_as_pdf, size: 100, color: Colors.red),
+            : const Icon(Icons.picture_as_pdf, size: 100, color: Color.fromARGB(255, 243, 107, 4)),
         const SizedBox(height: 8),
         TextButton(
           onPressed: () {
@@ -252,7 +252,7 @@ class _VerificationFormState extends State<VerificationForm> {
                   }
                 });
               },
-              child:  Text('Upload from Gallery',  style: CustomTextStyle.regularText.copyWith(fontSize: responsiveSize(context, 0.04)),), 
+              child:  Text('Upload from Gallery',  style: CustomTextStyle.semiBoldText.copyWith(fontSize: responsiveSize(context, 0.04)),), 
             ),
           ],
         ),

@@ -1,10 +1,7 @@
-// import 'package:bluejobs/provider/mapping/employee_location.dart';
 // import 'package:bluejobs/styles/responsive_utils.dart';
 // import 'package:bluejobs/styles/textstyle.dart';
 // import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:flutter/material.dart';
-// import 'package:geocoding/geocoding.dart';
-
 
 // class JobHunterResumeView extends StatefulWidget {
 //   final String userId;
@@ -42,31 +39,21 @@
 //   Widget build(BuildContext context) {
 //     return Scaffold(
 //       appBar: AppBar(
-//         leading: BackButton(color: const Color.fromARGB(255, 0, 0, 0)),
-//     //    backgroundColor: Color.fromARGB(255, 7, 30, 47),
-//         title: Text(
-//           'Job Hunter Details',
-//           style: CustomTextStyle.semiBoldText
-//               .copyWith(fontSize: responsiveSize(context, 0.04)),
-//         ),
+//         title: const Text('Job Hunter Resume'),
 //       ),
-//       body: Container(
-//     //    color: Color.fromARGB(255, 7, 30, 47),
-//         height: MediaQuery.of(context).size.height,
-//         child: userData == null
-//             ? const Center(child: CircularProgressIndicator())
-//             : SingleChildScrollView(
-//                 child: Column(
-//                   children: [
-//                    // const SizedBox(height: 40),
-//                     SizedBox(
-//                      // height: 500,
-//                       child: buildResumeTab(),
-//                     ),
-//                   ],
-//                 ),
+//       body: userData == null
+//           ? const Center(child: CircularProgressIndicator())
+//           : SingleChildScrollView(
+//               child: Column(
+//                 children: [
+//                   const SizedBox(height: 40),
+//                   SizedBox(
+//                     height: 500,
+//                     child: buildResumeTab(),
+//                   ),
+//                 ],
 //               ),
-//       ),
+//             ),
 //     );
 //   }
 
@@ -78,7 +65,7 @@
 //           : null,
 //       backgroundColor: Colors.white,
 //       child: userData?['profilePic'] == null
-//           ? Icon(Icons.person, size: profileHeight / 2, color: Colors.white)
+//           ? Icon(Icons.person, size: profileHeight / 2)
 //           : null,
 //     );
 //   }
@@ -94,13 +81,11 @@
 //       children: [
 //         Text(
 //           '$firstName $middleName $lastName $suffix',
-//           style: CustomTextStyle.regularText
-//               .copyWith(fontSize: responsiveSize(context, 0.04)),
+//           style: CustomTextStyle.semiBoldText,
 //         ),
 //         Text(
 //           userData?['role'] ?? '',
-//           style: CustomTextStyle.regularText
-//               .copyWith(fontSize: responsiveSize(context, 0.04)),
+//           style: CustomTextStyle.roleRegularText,
 //         ),
 //       ],
 //     );
@@ -111,85 +96,122 @@
 //     String middleName = userData?['middleName'] ?? '';
 //     String lastName = userData?['lastName'] ?? '';
 //     String suffix = userData?['suffix'] ?? '';
-//     List<String> skills = List<String>.from(userData?['skills'] ?? []);
 
 //     return userData == null
 //         ? const Center(child: CircularProgressIndicator())
-//         : SingleChildScrollView(
-//             padding: const EdgeInsets.all(20.0),
-//             child: Container(
-//               height: MediaQuery.of(context).size.height - 100,
-//               child: Column(
-//                 crossAxisAlignment: CrossAxisAlignment.start,
-//                 children: [
-//                   Text('Bio Data',
-//                       style: CustomTextStyle.typeRegularText
-//                           .copyWith(
-//                             fontWeight: FontWeight.bold,
-//                             fontSize: responsiveSize(context, 0.05))),
-//                   const SizedBox(height: 10),
-//                   Row(
-//                     children: [
-//                       buildResumeItem(
-//                           'Name',
-//                           '$firstName $middleName $lastName $suffix',
-//                           Icons.person,
-//                           Colors.white),
-//                     ],
-//                   ),
-//                   buildResumeItem(
-//                       'Sex', userData?['sex'] ?? '', Icons.male, Colors.white),
-//                   buildResumeItem('Birthday', userData?['birthdate'] ?? '',
-//                       Icons.cake, Colors.white),
-//                   buildResumeItem('Contacts', userData?['phoneNumber'] ?? '',
-//                       Icons.phone, Colors.white),
-//                   buildResumeItem('Email', userData?['email'] ?? '',
-//                       Icons.email, Colors.white),
-//                   buildResumeItem('Address', userData?['address'] ?? '',
-//                       Icons.location_on, Colors.white),
-//                   const SizedBox(height: 10),
-//                   Padding(
-//                     padding: const EdgeInsets.only(bottom: 10.0, top: 5.0),
-//                     child: Text(
-//                       'I am mostly good at!',
-//                       style: CustomTextStyle.semiBoldText.copyWith(
-//                         fontSize: responsiveSize(context, 0.04),
-//                       ),
+//         : FutureBuilder(
+//             future: fetchResumeData(),
+//             builder: (context, snapshot) {
+//               if (snapshot.hasData) {
+//                 return SingleChildScrollView(
+//                   padding: const EdgeInsets.all(20.0),
+//                   child: Container(
+//                     height: MediaQuery.of(context).size.height - 100,
+//                     child: Column(
+//                       crossAxisAlignment: CrossAxisAlignment.start,
+//                       children: [
+//                         Text('Bio Data',
+//                             style: CustomTextStyle.typeRegularText.copyWith(
+//                                 fontWeight: FontWeight.bold,
+//                                 fontSize: responsiveSize(context, 0.04))),
+//                         const SizedBox(height: 15),
+//                         Row(
+//                           children: [
+//                             buildResumeItem(
+//                                 'Name',
+//                                 '$firstName $middleName $lastName $suffix',
+//                                 Icons.person),
+//                           ],
+//                         ),
+//                         buildResumeItem(
+//                             'Sex', userData?['sex'] ?? '', Icons.male),
+//                         buildResumeItem('Birthday',
+//                             userData?['birthdate'] ?? '', Icons.cake),
+//                         buildResumeItem('Contacts',
+//                             userData?['phoneNumber'] ?? '', Icons.phone),
+//                         buildResumeItem(
+//                             'Email', userData?['email'] ?? '', Icons.email),
+//                         buildResumeItem('Address', userData?['address'] ?? '',
+//                             Icons.location_on),
+//                         const SizedBox(height: 10),
+//                         Text('Details',
+//                             style: CustomTextStyle.typeRegularText.copyWith(
+//                                 fontWeight: FontWeight.bold,
+//                                 fontSize: responsiveSize(context, 0.04))),
+//                         const SizedBox(height: 10),
+//                         ListView.builder(
+//                           shrinkWrap: true,
+//                           itemCount: snapshot.data!.length,
+//                           itemBuilder: (context, index) {
+//                             Map<String, dynamic> resumeData =
+//                                 snapshot.data![index];
+//                             return Column(
+//                               crossAxisAlignment: CrossAxisAlignment.start,
+//                               children: [
+//                                 buildResumeItem(
+//                                     'Education Attainment',
+//                                     resumeData['educationAttainment'] ?? '',
+//                                     Icons.school),
+//                                 buildResumeItem(
+//                                     'Experience Description',
+//                                     resumeData['experienceDescription'] ?? '',
+//                                     Icons.work),
+//                                 buildResumeItem('Skill Level',
+//                                     resumeData['skillLevel'] ?? '', Icons.star),
+//                                 buildResumeItem('Skills',
+//                                     resumeData['skills'] ?? '', Icons.work),
+//                                 const SizedBox(height: 10),
+//                                 Text('Certificates and Validity Check',
+//                                     style: CustomTextStyle.typeRegularText
+//                                         .copyWith(
+//                                             fontWeight: FontWeight.bold,
+//                                             fontSize:
+//                                                 responsiveSize(context, 0.04))),
+//                                 const SizedBox(height: 10),
+//                                 buildResumeItem(
+//                                     'Valid ID URL',
+//                                     resumeData['validIdUrl'] ?? '',
+//                                     Icons.file_copy),
+//                                 buildResumeItem(
+//                                     'Police Clearance URL',
+//                                     resumeData['policeClearanceUrl'] ?? '',
+//                                     Icons.file_copy),
+//                                 buildResumeItem(
+//                                     'Certificate URL',
+//                                     resumeData['certificateUrl'] ?? '',
+//                                     Icons.file_copy),
+//                               ],
+//                             );
+//                           },
+//                         ),
+//                       ],
 //                     ),
 //                   ),
-//                   buildSpecializationChips(skills),
-//                 ],
-//               ),
-//             ),
+//                 );
+//               } else {
+//                 return const Center(child: CircularProgressIndicator());
+//               }
+//             },
 //           );
 //   }
 
-//   Widget buildSpecializationChips(List<String> skills) {
-//     return Wrap(
-//       spacing: 8.0,
-//       runSpacing: 4.0,
-//       children: skills.map((specialization) {
-//         return Padding(
-//           padding: const EdgeInsets.symmetric(vertical: 4.0),
-//           child: Chip(
-//             backgroundColor: const Color.fromARGB(255, 243, 107, 4),
-//             label: Text(
-//               specialization,
-//               style: CustomTextStyle.regularText.copyWith(
-//                 color: Colors.white,
-//               ),
-//             ),
-//           ),
-//         );
-//       }).toList(),
-//     );
+//   Future<List<Map<String, dynamic>>> fetchResumeData() async {
+//     final resumeCollection = await FirebaseFirestore.instance
+//         .collection('users')
+//         .doc(widget.userId)
+//         .collection('resume')
+//         .get();
+//     List<Map<String, dynamic>> resumeData = [];
+//     for (var resume in resumeCollection.docs) {
+//       resumeData.add(resume.data());
+//     }
+//     return resumeData;
 //   }
 
 //   Widget buildResumeItem(
 //     String title,
 //     String content,
 //     IconData icon,
-//     Color iconColor,
 //   ) {
 //     return Padding(
 //       padding: const EdgeInsets.only(bottom: 10.0),
@@ -198,47 +220,51 @@
 //         children: [
 //           Row(
 //             children: [
-//               Icon(icon, size: responsiveSize(context, 0.03), color: iconColor),
+//               Icon(icon, size: responsiveSize(context, 0.03)),
 //               SizedBox(width: 10),
-//               Expanded(
-//                 child: RichText(
-//                   text: TextSpan(
-//                     children: [
-//                       TextSpan(
-//                         text: '$title: ',
-//                         style: CustomTextStyle.semiBoldText.copyWith(
-//                           fontSize: responsiveSize(context, 0.04),
-//                         ),
+//               RichText(
+//                 text: TextSpan(
+//                   children: [
+//                     TextSpan(
+//                       text: '$title: ',
+//                       style: CustomTextStyle.regularText.copyWith(
+//                         fontWeight: FontWeight.bold,
+//                         fontSize: responsiveSize(context, 0.03),
 //                       ),
+//                     ),
+//                     if (title == 'Certificate URL' ||
+//                         title == 'Police Clearance URL' ||
+//                         title == 'Valid ID URL')
+//                       TextSpan(
+//                         text: content.isEmpty ? 'None' : '',
+//                         style: CustomTextStyle.regularText.copyWith(
+//                           fontSize: responsiveSize(context, 0.03),
+//                         ),
+//                         children: content.isEmpty
+//                             ? []
+//                             : [
+//                                 WidgetSpan(
+//                                   child: Image.network(
+//                                     content,
+//                                     width: 100,
+//                                     height: 100,
+//                                     fit: BoxFit.cover,
+//                                   ),
+//                                 ),
+//                               ],
+//                       )
+//                     else
 //                       TextSpan(
 //                         text: content,
 //                         style: CustomTextStyle.regularText.copyWith(
-//                           fontSize: responsiveSize(context, 0.04),
+//                           fontSize: responsiveSize(context, 0.03),
 //                         ),
 //                       ),
-//                     ],
-//                   ),
+//                   ],
 //                 ),
 //               ),
 //             ],
 //           ),
-//           if (title == 'Address')
-//             TextButton(
-//               onPressed: () async {
-//                 final location = content;
-//                 final locations = await locationFromAddress(location);
-//                 final lat = locations[0].latitude;
-//                 final lon = locations[0].longitude;
-//                 showLocationPickerModal(
-//                   context,
-//                   TextEditingController(text: '$lat, $lon'),
-//                 );
-//               },
-//               child: Text(
-//                 'View on Map',
-//                 style: CustomTextStyle.regularText,
-//               ),
-//             ),
 //         ],
 //       ),
 //     );
@@ -285,166 +311,6 @@ class _JobHunterResumeViewState extends State<JobHunterResumeView> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Job Hunter Resume'),
-      ),
-      body: userData == null
-          ? const Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
-              child: Column(
-                children: [
-                  const SizedBox(height: 40),
-                  SizedBox(
-                    height: 500,
-                    child: buildResumeTab(),
-                  ),
-                ],
-              ),
-            ),
-    );
-  }
-
-  Widget buildProfilePicture() {
-    return CircleAvatar(
-      radius: profileHeight / 2,
-      backgroundImage: userData?['profilePic'] != null
-          ? NetworkImage(userData!['profilePic'])
-          : null,
-      backgroundColor: Colors.white,
-      child: userData?['profilePic'] == null
-          ? Icon(Icons.person, size: profileHeight / 2)
-          : null,
-    );
-  }
-
-  Widget buildProfile() {
-    String firstName = userData?['firstName'] ?? '';
-    String middleName = userData?['middleName'] ?? '';
-    String lastName = userData?['lastName'] ?? '';
-    String suffix = userData?['suffix'] ?? '';
-
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Text(
-          '$firstName $middleName $lastName $suffix',
-          style: CustomTextStyle.semiBoldText,
-        ),
-        Text(
-          userData?['role'] ?? '',
-          style: CustomTextStyle.roleRegularText,
-        ),
-      ],
-    );
-  }
-
-  Widget buildResumeTab() {
-    String firstName = userData?['firstName'] ?? '';
-    String middleName = userData?['middleName'] ?? '';
-    String lastName = userData?['lastName'] ?? '';
-    String suffix = userData?['suffix'] ?? '';
-
-    return userData == null
-        ? const Center(child: CircularProgressIndicator())
-        : FutureBuilder(
-            future: fetchResumeData(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return SingleChildScrollView(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Container(
-                    height: MediaQuery.of(context).size.height - 100,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Bio Data',
-                            style: CustomTextStyle.typeRegularText.copyWith(
-                                fontWeight: FontWeight.bold,
-                                fontSize: responsiveSize(context, 0.04))),
-                        const SizedBox(height: 15),
-                        Row(
-                          children: [
-                            buildResumeItem(
-                                'Name',
-                                '$firstName $middleName $lastName $suffix',
-                                Icons.person),
-                          ],
-                        ),
-                        buildResumeItem(
-                            'Sex', userData?['sex'] ?? '', Icons.male),
-                        buildResumeItem('Birthday',
-                            userData?['birthdate'] ?? '', Icons.cake),
-                        buildResumeItem('Contacts',
-                            userData?['phoneNumber'] ?? '', Icons.phone),
-                        buildResumeItem(
-                            'Email', userData?['email'] ?? '', Icons.email),
-                        buildResumeItem('Address', userData?['address'] ?? '',
-                            Icons.location_on),
-                        const SizedBox(height: 10),
-                        Text('Details',
-                            style: CustomTextStyle.typeRegularText.copyWith(
-                                fontWeight: FontWeight.bold,
-                                fontSize: responsiveSize(context, 0.04))),
-                        const SizedBox(height: 10),
-                        ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: snapshot.data!.length,
-                          itemBuilder: (context, index) {
-                            Map<String, dynamic> resumeData =
-                                snapshot.data![index];
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                buildResumeItem(
-                                    'Education Attainment',
-                                    resumeData['educationAttainment'] ?? '',
-                                    Icons.school),
-                                buildResumeItem(
-                                    'Experience Description',
-                                    resumeData['experienceDescription'] ?? '',
-                                    Icons.work),
-                                buildResumeItem('Skill Level',
-                                    resumeData['skillLevel'] ?? '', Icons.star),
-                                buildResumeItem('Skills',
-                                    resumeData['skills'] ?? '', Icons.work),
-                                const SizedBox(height: 10),
-                                Text('Certificates and Validity Check',
-                                    style: CustomTextStyle.typeRegularText
-                                        .copyWith(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize:
-                                                responsiveSize(context, 0.04))),
-                                const SizedBox(height: 10),
-                                buildResumeItem(
-                                    'Valid ID URL',
-                                    resumeData['validIdUrl'] ?? '',
-                                    Icons.file_copy),
-                                buildResumeItem(
-                                    'Police Clearance URL',
-                                    resumeData['policeClearanceUrl'] ?? '',
-                                    Icons.file_copy),
-                                buildResumeItem(
-                                    'Certificate URL',
-                                    resumeData['certificateUrl'] ?? '',
-                                    Icons.file_copy),
-                              ],
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              } else {
-                return const Center(child: CircularProgressIndicator());
-              }
-            },
-          );
-  }
-
   Future<List<Map<String, dynamic>>> fetchResumeData() async {
     final resumeCollection = await FirebaseFirestore.instance
         .collection('users')
@@ -458,65 +324,274 @@ class _JobHunterResumeViewState extends State<JobHunterResumeView> {
     return resumeData;
   }
 
-  Widget buildResumeItem(
-    String title,
-    String content,
-    IconData icon,
-  ) {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Job Hunter Resume'),
+      ),
+      body: userData == null
+          ? const Center(child: CircularProgressIndicator())
+          : FutureBuilder<List<Map<String, dynamic>>>(
+              future: fetchResumeData(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return const Center(child: Text('No resume data found.'));
+                }
+
+                String firstName = userData?['firstName'] ?? '';
+                String middleName = userData?['middleName'] ?? '';
+                String lastName = userData?['lastName'] ?? '';
+                String suffix = userData?['suffix'] ?? '';
+
+                return SingleChildScrollView(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CircleAvatar(
+                            radius: profileHeight / 2,
+                            backgroundImage: userData?['profilePic'] != null
+                                ? NetworkImage(userData!['profilePic'])
+                                : null,
+                            backgroundColor: Colors.white,
+                            child: userData?['profilePic'] == null
+                                ? Icon(Icons.person, size: profileHeight / 2)
+                                : null,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      Text('Bio Data',
+                          style: CustomTextStyle.typeRegularText.copyWith(
+                              fontWeight: FontWeight.bold,
+                              fontSize: responsiveSize(context, 0.04))),
+                      const SizedBox(height: 15),
+                      buildResumeItem(
+                          'Name', '$firstName $middleName $lastName $suffix'),
+                      buildResumeItem('Sex', userData?['sex'] ?? ''),
+                      buildResumeItem('Birthday', userData?['birthdate'] ?? ''),
+                      buildResumeItem(
+                          'Contacts', userData?['phoneNumber'] ?? ''),
+                      buildResumeItem('Email', userData?['email'] ?? ''),
+                      buildResumeItem('Address', userData?['address'] ?? ''),
+                      const SizedBox(height: 10),
+                      for (var resumeData in snapshot.data!) ...[
+                        // Education Attainment
+                        Text('Education Attainment',
+                            style: CustomTextStyle.typeRegularText.copyWith(
+                                fontWeight: FontWeight.bold,
+                                fontSize: responsiveSize(context, 0.04))),
+                        const SizedBox(height: 10),
+                        buildResumeItem('Education Level',
+                            resumeData['educationLevel'] ?? ''),
+                        buildResumeItem(
+                            'School Attended', resumeData['schoolName'] ?? ''),
+                        buildResumeItem('Year Completed',
+                            resumeData['year Completed'] ?? ''),
+                        const SizedBox(height: 20),
+                        // Work Experience
+                        Text('Work Experience',
+                            style: CustomTextStyle.typeRegularText.copyWith(
+                                fontWeight: FontWeight.bold,
+                                fontSize: responsiveSize(context, 0.04))),
+                        const SizedBox(height: 10),
+                        buildResumeItem(
+                            'Company Name', resumeData['companyName'] ?? ''),
+                        buildResumeItem('Position Title',
+                            resumeData['positionTitle'] ?? ''),
+                        buildResumeItem(
+                            'Duration of Work', resumeData['duration'] ?? ''),
+                        const SizedBox(height: 20),
+                        // Seminar Attended
+                        Text('Seminar Attended',
+                            style: CustomTextStyle.typeRegularText.copyWith(
+                                fontWeight: FontWeight.bold,
+                                fontSize: responsiveSize(context, 0.04))),
+                        const SizedBox(height: 10),
+                        buildResumeItem(
+                            'Seminar', resumeData['seminarName'] ?? ''),
+                        buildResumeItem(
+                            'Year Attended', resumeData['yearAttended'] ?? ''),
+                        const SizedBox(height: 20),
+                        // Skill
+                        Text('Skill and Skillset',
+                            style: CustomTextStyle.typeRegularText.copyWith(
+                                fontWeight: FontWeight.bold,
+                                fontSize: responsiveSize(context, 0.04))),
+                        const SizedBox(height: 10),
+                        buildResumeItem('Skill', resumeData['skills'] ?? ''),
+                        buildResumeItem(
+                            'Proficiency', resumeData['skillSet'] ?? ''),
+                        const SizedBox(height: 20),
+                        // References
+                        Text('References',
+                            style: CustomTextStyle.typeRegularText.copyWith(
+                                fontWeight: FontWeight.bold,
+                                fontSize: responsiveSize(context, 0.04))),
+                        const SizedBox(height: 10),
+                        buildResumeItem(
+                            'Name', resumeData['referenceName'] ?? ''),
+                        buildResumeItem(
+                            'Company', resumeData['referenceCompany'] ?? ''),
+                        buildResumeItem('Relationship',
+                            resumeData['referenceRelationship'] ?? ''),
+                        buildResumeItem('Contact Number',
+                            resumeData['referencePhoneNum'] ?? ''),
+                        const SizedBox(height: 20),
+                        // Certs and ids
+                        Text('Certificates and Validity Check',
+                            style: CustomTextStyle.typeRegularText.copyWith(
+                                fontWeight: FontWeight.bold,
+                                fontSize: responsiveSize(context, 0.04))),
+                        const SizedBox(height: 10),
+                        buildImageButton('Valid ID', resumeData['validIdUrl']),
+                        buildImageButton('Police Clearance',
+                            resumeData['policeClearanceUrl']),
+                        buildImageButton(
+                            'Certificate', resumeData['certificateUrl']),
+                        const SizedBox(height: 20),
+                      ],
+                    ],
+                  ),
+                );
+              },
+            ),
+    );
+  }
+
+  Widget buildResumeItem(String title, String content) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
         children: [
-          Row(
-            children: [
-              Icon(icon, size: responsiveSize(context, 0.03)),
-              SizedBox(width: 10),
-              RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: '$title: ',
-                      style: CustomTextStyle.regularText.copyWith(
-                        fontWeight: FontWeight.bold,
-                        fontSize: responsiveSize(context, 0.03),
-                      ),
-                    ),
-                    if (title == 'Certificate URL' ||
-                        title == 'Police Clearance URL' ||
-                        title == 'Valid ID URL')
-                      TextSpan(
-                        text: content.isEmpty ? 'None' : '',
-                        style: CustomTextStyle.regularText.copyWith(
-                          fontSize: responsiveSize(context, 0.03),
-                        ),
-                        children: content.isEmpty
-                            ? []
-                            : [
-                                WidgetSpan(
-                                  child: Image.network(
-                                    content,
-                                    width: 100,
-                                    height: 100,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ],
-                      )
-                    else
-                      TextSpan(
-                        text: content,
-                        style: CustomTextStyle.regularText.copyWith(
-                          fontSize: responsiveSize(context, 0.03),
-                        ),
-                      ),
-                  ],
+          SizedBox(width: 10),
+          RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: '$title: ',
+                  style: CustomTextStyle.regularText.copyWith(
+                    fontWeight: FontWeight.bold,
+                    fontSize: responsiveSize(context, 0.03),
+                  ),
                 ),
-              ),
-            ],
+                TextSpan(
+                  text: content.isEmpty ? 'None' : content,
+                  style: CustomTextStyle.regularText.copyWith(
+                    fontSize: responsiveSize(context, 0.03),
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget buildImageButton(String title, String? imageUrl) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10.0),
+      child: Row(
+        children: [
+          SizedBox(width: 10),
+          Text(
+            '$title: ',
+            style: CustomTextStyle.regularText.copyWith(
+              fontWeight: FontWeight.bold,
+              fontSize: responsiveSize(context, 0.03),
+            ),
+          ),
+          const SizedBox(width: 10),
+          ElevatedButton(
+            onPressed: () {
+              if (imageUrl != null && imageUrl.isNotEmpty) {
+                _showFilePreviewModal(imageUrl, title);
+              }
+            },
+            child: Text('View'),
+            style: ElevatedButton.styleFrom(
+              foregroundColor: Color.fromARGB(255, 243, 107, 4),
+              backgroundColor:
+                  const Color.fromARGB(255, 7, 30, 47), // Text color
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showFilePreviewModal(String? url, String label) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return Container(
+          padding: const EdgeInsets.all(10),
+          height: MediaQuery.of(context).size.height * 0.7,
+          decoration: const BoxDecoration(
+            color: Color.fromARGB(255, 7, 30, 47),
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+            ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Label at the top
+              Text(
+                label,
+                style: CustomTextStyle.semiBoldText.copyWith(
+                  fontSize: responsiveSize(context, 0.04),
+                  color: Colors.white,
+                ),
+              ),
+              const SizedBox(height: 10),
+
+              // Image preview section
+              url != null
+                  ? Expanded(
+                      child: InteractiveViewer(
+                        boundaryMargin: const EdgeInsets.all(20.0),
+                        minScale: 0.5,
+                        maxScale: 4.0,
+                        child: Container(
+                          height: 300,
+                          width: MediaQuery.of(context).size.width * 0.9,
+                          decoration: BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Image.network(
+                            url,
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                      ),
+                    )
+                  : Center(
+                      child: Text(
+                        'No file uploaded',
+                        style: CustomTextStyle.regularText.copyWith(
+                          fontSize: responsiveSize(context, 0.04),
+                        ),
+                      ),
+                    ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

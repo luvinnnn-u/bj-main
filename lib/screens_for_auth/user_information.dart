@@ -176,46 +176,49 @@ class _UserInformationState extends State<UserInformation> {
                       padding: EdgeInsets.symmetric(
                           horizontal: responsive.horizontalPadding(0.04)),
                       child: ListBody(children: [
+                        _buildLabel('First Name'),
                         TextField(
                           // first name input
+                          
                           controller: _firstNameController,
                           focusNode: _firstNameFocusNode,
-                          decoration: customInputDecoration('First Name'),
+                          decoration: customInputDecoration(''),
                           cursorColor: const Color.fromARGB(255, 0, 0, 0),
                           style: CustomTextStyle.regularText.copyWith(fontSize: responsiveSize(context, 0.04)),
                         ),
 
                         SizedBox(height: responsive.verticalPadding(0.02)),
-
+                        _buildLabel('Last Name'),
                         TextField(
                           // last name input
                           controller: _lastNameController,
                           focusNode: _lastNameFocusNode,
-                          decoration: customInputDecoration('Last Name'),
+                          decoration: customInputDecoration(''),
                           cursorColor: const Color.fromARGB(255, 0, 0, 0),
                           style: CustomTextStyle.regularText.copyWith(fontSize: responsiveSize(context, 0.04)),
                         ),
 
                         SizedBox(height: responsive.verticalPadding(0.02)),
-
+                        
+                        _buildLabel('Middle Name'),
                         TextField(
                           // middle name input
                           controller: _middleNameController,
                           focusNode: _middleNameFocusNode,
                           decoration:
-                              customInputDecoration('Middle Name (Optional)'),
+                              customInputDecoration('*Optional'),
                               cursorColor: const Color.fromARGB(255, 0, 0, 0),
                           style: CustomTextStyle.regularText.copyWith(fontSize: responsiveSize(context, 0.04)),
                         ),
 
                         SizedBox(height: responsive.verticalPadding(0.02)),
-
+                        _buildLabel('Suffix'),
                         TextField(
                           // suffix input
                           controller: _suffixController,
                           focusNode: _suffixFocusNode,
                           decoration:
-                              customInputDecoration('Suffix (Optional)'),
+                              customInputDecoration('*Optional'),
                               cursorColor: const Color.fromARGB(255, 0, 0, 0),
                           style: CustomTextStyle.regularText.copyWith(fontSize: responsiveSize(context, 0.04)),
                         ),
@@ -230,9 +233,9 @@ class _UserInformationState extends State<UserInformation> {
 
                         SizedBox(height: responsive.verticalPadding(0.02)),
 
-
+_buildLabel('Phone Number'),
 TextFormField(
-  decoration: customInputDecoration('Phone Number'),
+  decoration: customInputDecoration(''),
   cursorColor: const Color.fromARGB(255, 0, 0, 0),
   style: CustomTextStyle.regularText.copyWith(fontSize: responsiveSize(context, 0.04)),
   controller: _phoneController,
@@ -243,7 +246,7 @@ TextFormField(
 ),
 
                         // sex input
-
+_buildLabel('Sex'),
 Padding(
   padding: const EdgeInsets.only(top: 8.0),
   child: Column(
@@ -253,15 +256,7 @@ Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
         decoration: BoxDecoration(
           color: const Color.fromARGB(255, 255, 255, 255), // Background color
-          boxShadow: [
-            // BoxShadow(
-            //   color: Colors.grey.withOpacity(0.5),
-            //   spreadRadius: 1,
-            //   blurRadius: 5,
-            //   offset: const Offset(0, 3),
-            // ),
-          ],
-          border: Border.all(color: const Color.fromARGB(255, 0, 0, 0), width: 2),
+          border: Border.all(color: const Color.fromARGB(255, 0, 0, 0), width: 1),
           borderRadius: BorderRadius.circular(15),
         ),
         child: DropdownButtonHideUnderline(
@@ -285,7 +280,7 @@ Padding(
             hint: const Padding(
               padding: EdgeInsets.only(top: 8.0),
               child: Text(
-                'What\'s your sex?',
+                '',
                 style: CustomTextStyle.regularText,
               ),
             ),
@@ -303,6 +298,7 @@ Padding(
 SizedBox(height: responsive.verticalPadding(0.01)),
 
 // birthdate input
+_buildLabel('Birthday'),
 Padding(
   padding: const EdgeInsets.only(top: 7.0),
   child: GestureDetector(
@@ -311,7 +307,7 @@ Padding(
       child: TextField(
         controller: _birthdayController,
         focusNode: _birthdayFocusNode,
-        decoration: customInputDecoration('Birthday', 
+        decoration: customInputDecoration('', 
           suffixIcon: IconButton(
             icon: const Icon(Icons.calendar_today, color:   Colors.white,),
             onPressed: () {}, // Add functionality if needed
@@ -328,6 +324,7 @@ Padding(
   SizedBox(height: responsive.verticalPadding(0.01)),
 
 // address input
+_buildLabel('Find your Address'),
 Padding(
   padding: const EdgeInsets.only(top: 8.0),
   child: Autocomplete<String>(
@@ -353,9 +350,9 @@ Padding(
         controller: fieldTextEditingController,
         focusNode: fieldFocusNode,
         decoration: customInputDecoration(
-          'Find your Address',
+          '',
           suffixIcon: IconButton(
-            icon: const Icon(Icons.search, color: Colors.white,),
+            icon: const Icon(Icons.search, color: const Color.fromARGB(255, 7, 30, 47)),
             onPressed: () {}, // Add functionality if needed
           ),
         ),
@@ -399,6 +396,7 @@ Padding(
 
 // user type or role input
 
+_buildLabel('Select your Role.'),
 Padding(
   padding: const EdgeInsets.only(top: 8.0),
   child: Column(
@@ -431,7 +429,7 @@ Padding(
             hint:  Padding(
               padding: EdgeInsets.only(top: 8.0),
               child: Text(
-                ' Employer or Job Hunter?',
+                ' ',
                 style: CustomTextStyle.regularText.copyWith(fontSize: responsiveSize(context, 0.04)),
               ),
             ),
@@ -469,6 +467,16 @@ Padding(
         )));
   }
 
+  Widget _buildLabel(String label) {
+  return Padding(
+    padding: const EdgeInsets.only(bottom: 5.0),
+    child: Text(
+      label,
+      style: CustomTextStyle.semiBoldText.copyWith(fontSize: responsiveSize(context, 0.04)),
+    ),
+  );
+}
+
 
 void showSnackBar(BuildContext context, String message) {
   ScaffoldMessenger.of(context).showSnackBar(
@@ -476,7 +484,7 @@ void showSnackBar(BuildContext context, String message) {
       backgroundColor: Color.fromARGB(255, 243, 107, 4), // Set snackbar background color to custom button color
       content: Text(
         message,
-        style: CustomTextStyle.regularText.copyWith(fontSize: responsiveSize(context, 0.04)), // Set snackbar text style to regular text with font size 14
+        style: CustomTextStyle.regularText.copyWith(color: Colors.white,fontSize: responsiveSize(context, 0.04)), // Set snackbar text style to regular text with font size 14
       ),
     ),
   );

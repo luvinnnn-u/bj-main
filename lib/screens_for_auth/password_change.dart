@@ -226,16 +226,17 @@ class _PasswordChangeState extends State<PasswordChange> {
     return Scaffold(
       appBar: AppBar(
         leading: const BackButton(
-          color: Colors.white,
+          color: Color.fromARGB(255, 7, 30, 47),
         ),
         title: Text(
           'Forgot Password',
           style: CustomTextStyle.semiBoldText.copyWith(
-              color: Colors.white, fontSize: responsiveSize(context, 0.04)),
+             // color: Colors.white,
+               fontSize: responsiveSize(context, 0.04)),
         ),
-        backgroundColor: const Color.fromARGB(255, 7, 30, 47),
+       // backgroundColor: const Color.fromARGB(255, 7, 30, 47),
       ),
-      backgroundColor: const Color.fromARGB(255, 7, 30, 47),
+     // backgroundColor: const Color.fromARGB(255, 7, 30, 47),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -251,15 +252,15 @@ class _PasswordChangeState extends State<PasswordChange> {
                 Text(
                   'Oh no! You forgot your password?',
                   style: CustomTextStyle.semiBoldText.copyWith(
-                    color: Colors.white,
+                  //  color: Colors.white,
                     fontSize: responsiveSize(context, 0.05),
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 15),
                 Text(
-                  'No worries! Enter the e-mail address associated to your account. ',
+                  'No worries! Enter the email address associated to your account and we BlueJobs team will send you a link for it ',
                   style: CustomTextStyle.regularText.copyWith(
-                    color: Colors.white,
+                  //  color: Colors.white,
                     fontSize: responsiveSize(context, 0.04),
                   ),
                 ),
@@ -269,7 +270,7 @@ class _PasswordChangeState extends State<PasswordChange> {
                 TextFormField(
                   decoration: customInputDecoration('Email').copyWith(
                     errorStyle: CustomTextStyle.regularText
-                        .copyWith(color: Colors.white),
+                        .copyWith(color: Color.fromARGB(255, 7, 30, 47)),
                   ),
                   style: CustomTextStyle.regularText,
                   validator: (value) {

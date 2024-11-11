@@ -97,16 +97,17 @@ class _ButtonSpecializationPageState extends State<ButtonSpecializationPage> {
                             label: Text(
                               skill,
                               style: CustomTextStyle.regularText.copyWith(
-                                color: isSelected ? Colors.white : Colors.white,
+                            //    color: isSelected ? Colors.white : Colors.white,
+                            fontSize: responsiveSize(context, 0.04)
                               ),
                             ),
                             selected: isSelected,
                             selectedColor: const Color.fromARGB(255, 7, 30, 47),
-                            backgroundColor:
-                                isSelected ? const Color.fromARGB(255, 7, 30, 47) : const Color.fromARGB(255, 7, 30, 47),
+                          //  backgroundColor:
+                             //   isSelected ? const Color.fromARGB(255, 7, 30, 47) : const Color.fromARGB(255, 7, 30, 47),
                             checkmarkColor: Colors.orange,
                             shape: RoundedRectangleBorder(
-                              side: const BorderSide(color: Colors.white),
+                              side: const BorderSide(color: Color.fromARGB(255, 7, 30, 47) ),
                               borderRadius: BorderRadius.circular(10),
                             ),
                             onSelected: (selected) {

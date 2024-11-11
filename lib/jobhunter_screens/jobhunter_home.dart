@@ -323,7 +323,7 @@ class _JobHunterHomePageState extends State<JobHunterHomePage> {
                                               },
                                               child: Container(
                                                 height: 53,
-                                                width: 335,
+                                                width: 302,
                                                 decoration: BoxDecoration(
                                                   
                                                   border: Border.all(

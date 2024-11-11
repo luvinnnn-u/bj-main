@@ -146,10 +146,10 @@ class _NearWorkersState extends State<NearWorkers> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 7, 30, 47),
+     //   backgroundColor: Color.fromARGB(255, 7, 30, 47),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back,
-              color: Color.fromARGB(255, 255, 255, 255)),
+              color: Color.fromARGB(255, 7, 30, 47),),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
@@ -159,7 +159,7 @@ class _NearWorkersState extends State<NearWorkers> {
         ),
          actions: [
           IconButton(
-            icon: const Icon(Icons.my_location, color: Colors.white,),
+            icon: const Icon(Icons.my_location, color: Color.fromARGB(255, 7, 30, 47),),
             onPressed: () {
               setState(() {
                 _loadUserLocation();
@@ -169,52 +169,8 @@ class _NearWorkersState extends State<NearWorkers> {
         ],
       ),  
     
-//      body: _isLoading
-//       ? const Center(child: CircularProgressIndicator(color: Colors.white,))
-
-//       : Stack(
-        
-//           children: [
-//             FlutterMap(
-//               options: MapOptions(
-//                 center: _userLocation,
-//                 zoom: 14.0,
-//               ),
-//               children: [
-//                 TileLayer(
-//                   urlTemplate:
-//                       'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-//                   subdomains: ['a', 'b', 'c'],
-//                 ),
-//                 MarkerLayer(markers: _markers),
-//                 MarkerLayer(
-//                   markers: [
-//                     Marker(
-//                       point: _userLocation,
-//                       child: Icon(
-//                         Icons.location_on,
-//                         color: Colors.blueAccent,
-//                         size: 50.0,
-//                       ),
-//                     ),
-//                   ],
-//                 ),
-//               ],
-//             ),
-//           ],
-//         ),
-//   floatingActionButton: FloatingActionButton(
-//     onPressed: _loadUserLocation,
-//     child: const Icon(Icons.center_focus_strong),
-//     tooltip: 'Center Map',
-//   ),
-// );
-//   }
-// }
-
-
   
-    backgroundColor: Color.fromARGB(255, 7, 30, 47), // Set the background color of the Scaffold
+   // backgroundColor: Color.fromARGB(255, 7, 30, 47), // Set the background color of the Scaffold
     body: _isLoading
         ? const Center(child: CircularProgressIndicator(color: Colors.white,))
         : Container( // Wrap the Stack with a Container

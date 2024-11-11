@@ -142,7 +142,7 @@ class NotificationsPage extends StatelessWidget {
               return Center(child: CircularProgressIndicator());
             default:
               if (snapshot.data!.docs.isEmpty) {
-                return Center(child: Text('No notifications yet.', style: CustomTextStyle.semiBoldText.copyWith( fontSize: responsiveSize(context, 0.04)),));
+                return Center(child: Text('No notifications yet.', style: CustomTextStyle.regularText.copyWith( fontSize: responsiveSize(context, 0.04)),));
               }
 
               return ListView.builder(

@@ -64,7 +64,7 @@ class _FindOthersPageState extends State<FindOthersPage> {
         backgroundColor: appBarColor,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back,
-              color: Color.fromARGB(255, 255, 255, 255)),
+              color: Color.fromARGB(255, 7, 30, 47)),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
@@ -74,7 +74,7 @@ class _FindOthersPageState extends State<FindOthersPage> {
         ),
       ),
       body: Container(
-        color: Color.fromARGB(255, 7, 30, 47),
+     //   color: Color.fromARGB(255, 7, 30, 47),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Column(

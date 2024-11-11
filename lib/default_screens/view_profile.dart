@@ -71,7 +71,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ? Padding(
                     padding: const EdgeInsets.all(20.0),
                     child: IconButton(
-                      icon: const Icon(Icons.message, color: Colors.white,),
+                      icon: const Icon(Icons.message, color: Color.fromARGB(255, 7, 30, 47),),
                       onPressed: () {
                         Navigator.push(
                           context,

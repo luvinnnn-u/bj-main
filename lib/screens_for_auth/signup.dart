@@ -295,10 +295,10 @@ class _SignUpPageState extends State<SignUpPage> {
                 style: CustomTextStyle.regularText,
               ),
               SizedBox(height: responsive.verticalPadding(0.02)),
-
+              _buildLabel('Email'),
               TextField(
                 controller: _emailController,
-                decoration: customInputDecoration('Email'),
+                decoration: customInputDecoration(''),
                 cursorColor: const Color.fromARGB(255, 0, 0, 0),
                 style: CustomTextStyle.regularText.copyWith(
                   fontSize: responsiveSize(context, 0.04),
@@ -307,11 +307,12 @@ class _SignUpPageState extends State<SignUpPage> {
               SizedBox(height: responsive.verticalPadding(0.02)),
 
               // Password Field
+          _buildLabel('Password'),
               TextField(
                 controller: _passwordController,
                 obscureText: _obscureText,
                 decoration: customInputDecoration(
-                  'Password',
+                  '',
                   suffixIcon: IconButton(
                     icon: Icon(
                       _obscureText ? Icons.visibility : Icons.visibility_off,
@@ -332,11 +333,12 @@ class _SignUpPageState extends State<SignUpPage> {
               SizedBox(height: responsive.verticalPadding(0.02)),
 
               // Confirm Password Field
+              _buildLabel('Confirm Password'),
               TextField(
                 controller: _confirmPasswordController,
                 obscureText: _obscureConfirmPasswordText,
                 decoration: customInputDecoration(
-                  'Confirm Password',
+                  '',
                   suffixIcon: IconButton(
                     icon: Icon(
                       _obscureConfirmPasswordText ? Icons.visibility : Icons.visibility_off,
@@ -450,6 +452,19 @@ class _SignUpPageState extends State<SignUpPage> {
       ),
     );
   }
+
+
+  // Helper function to build labels
+Widget _buildLabel(String label) {
+  return Padding(
+    padding: const EdgeInsets.only(bottom: 5.0),
+    child: Text(
+      label,
+      style: CustomTextStyle.semiBoldText.copyWith(fontSize: responsiveSize(context, 0.04)),
+    ),
+  );
+}
+
 }
  // Validators for email and password
  extension EmailValidator on String {
