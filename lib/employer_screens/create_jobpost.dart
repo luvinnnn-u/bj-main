@@ -138,7 +138,7 @@ Widget build(BuildContext context) {
                       controller: _titleController,
                       focusNode: _titleFocusNode,
                       decoration: customInputDecoration(''),
-                      cursorColor: Colors.white,
+                      cursorColor: Color.fromARGB(255, 7, 30, 47),
                        style: CustomTextStyle.regularText.copyWith(
                               fontSize: responsiveSize(context, 0.04)),
                       maxLines: 10,
@@ -160,7 +160,7 @@ Widget build(BuildContext context) {
                       controller: _descriptionController,
                       focusNode: _descriptionFocusNode,
                       decoration: customInputDecoration(''),
-                      cursorColor: Colors.white,
+                      cursorColor: Color.fromARGB(255, 7, 30, 47),
                        style: CustomTextStyle.regularText.copyWith(
                               fontSize: responsiveSize(context, 0.04)),
 
@@ -181,10 +181,7 @@ Widget build(BuildContext context) {
                     _buildLabel('Type of Job', ),
                     DropdownButtonFormField(
                       decoration: customInputDecoration('').copyWith(
-                        suffixIcon: Icon(
-                          Icons.arrow_drop_down,
-                          color: Colors.white,
-                        ),
+                       
                       ),
                       focusNode: _typeFocusNode,
                       value: _typeController.text.isEmpty
@@ -196,9 +193,7 @@ Widget build(BuildContext context) {
                         });
                       },
                       items: [
-                        // 'Contractual Job',
-                        // 'Stay In Job',
-                        // 'Project Based',
+                       
                        ' Full-Time Job' ,
 'Part-Time Job',
 'Freelance',
@@ -227,7 +222,7 @@ Widget build(BuildContext context) {
                       controller: _locationController,
                       focusNode: _locationFocusNode,
                       decoration: customInputDecoration(''),
-                      cursorColor: Colors.white,
+                      cursorColor: Color.fromARGB(255, 7, 30, 47),
                        style: CustomTextStyle.regularText.copyWith(
                               fontSize: responsiveSize(context, 0.04)),
                       maxLines: 5,
@@ -278,14 +273,9 @@ Widget build(BuildContext context) {
                     ),
                     const SizedBox(height: 20),
 
-
+_buildLabel('Working Hours'),
 DropdownButtonFormField(
-  decoration: customInputDecoration('Working Hours').copyWith(
-    suffixIcon: Icon(
-      Icons.arrow_drop_down,
-      color: Colors.white,
-    ),
-    
+  decoration: customInputDecoration('').copyWith( 
   ),
                        style: CustomTextStyle.regularText.copyWith(
                               fontSize: responsiveSize(context, 0.04)),
@@ -321,7 +311,7 @@ DropdownButtonFormField(
       ),
     );
   }).toList(),
-  dropdownColor: Color.fromARGB(255, 7, 30, 47),
+  dropdownColor: Color.fromARGB(255, 253, 253, 253),
 ),
                     const SizedBox(height: 20),
                   Column(
@@ -347,13 +337,15 @@ DropdownButtonFormField(
         );
       },
       child: Text(
-        'Cancel', style: CustomTextStyle.semiBoldText.copyWith(color: Colors.orange, fontSize: responsiveSize(context, 0.04)),
+        'Cancel', style: CustomTextStyle.semiBoldText.copyWith(color: const Color.fromARGB(255, 255, 255, 255), fontSize: responsiveSize(context, 0.04)),
         
       ),
       style: OutlinedButton.styleFrom(
-        side: const BorderSide(color: Colors.white),
+        side: const BorderSide(color: Color.fromARGB(255, 7, 30, 47)),
+        backgroundColor:Color.fromARGB(255, 7, 30, 47) ,
+
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15),
+                   borderRadius: BorderRadius.circular(15),
         ),
         minimumSize: const Size(double.infinity, 50),
       ),

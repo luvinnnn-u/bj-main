@@ -45,6 +45,7 @@ class _EmployerProfilePageState extends State<EmployerProfilePage> {
         appBar: AppBar(
           leading: BackButton(
             color: const Color.fromARGB(255, 0, 0, 0),
+            onPressed: () => Navigator.of(context).pop(),
           ),
           backgroundColor: Color.fromARGB(255, 255, 255, 255),
         ),
@@ -193,6 +194,7 @@ class _EmployerProfilePageState extends State<EmployerProfilePage> {
               padding: const EdgeInsets.all(8.0),
               child: Card(
                // color: Color.fromARGB(255, 7, 30, 47),
+               color: Colors.white,
                 shape: RoundedRectangleBorder(
                   side: BorderSide(color: Colors.white),
                   borderRadius: BorderRadius.circular(15),
@@ -275,24 +277,72 @@ class _EmployerProfilePageState extends State<EmployerProfilePage> {
                               ],
                             )
                           : Container(),
-                      Text(
-                        "Type of Job: $type",
-                        style: CustomTextStyle.regularText.copyWith(
-                          fontSize: responsiveSize(context, 0.04),
-                        ),
-                      ),
-                      Text(
-                        "Working Hours: $workingHours",
-                        style: CustomTextStyle.regularText.copyWith(
-                          fontSize: responsiveSize(context, 0.04),
-                        ),
-                      ),
-                      Text(
-                        "Start Date: $startDate",
-                        style: CustomTextStyle.regularText.copyWith(
-                          fontSize: responsiveSize(context, 0.04),
-                        ),
-                      ),
+                      // Text(
+                      //   "Type of Job: $type",
+                      //   style: CustomTextStyle.regularText.copyWith(
+                      //     fontSize: responsiveSize(context, 0.04),
+                      //   ),
+                      // ),
+                      // Text(
+                      //   "Working Hours: $workingHours",
+                      //   style: CustomTextStyle.regularText.copyWith(
+                      //     fontSize: responsiveSize(context, 0.04),
+                      //   ),
+                      // ),
+                      // Text(
+                      //   "Start Date: $startDate",
+                      //   style: CustomTextStyle.regularText.copyWith(
+                      //     fontSize: responsiveSize(context, 0.04),
+                      //   ),
+                      // ),
+                      Row(
+  children: [
+    Text(
+      "Type of Job: ",
+      style: CustomTextStyle.semiBoldText.copyWith(
+        fontSize: responsiveSize(context, 0.04),
+      ),
+    ),
+    Text(
+      type,
+      style: CustomTextStyle.regularText.copyWith(
+        fontSize: responsiveSize(context, 0.04),
+      ),
+    ),
+  ],
+),
+Row(
+  children: [
+    Text(
+      "Working Hours: ",
+      style: CustomTextStyle.semiBoldText.copyWith(
+        fontSize: responsiveSize(context, 0.04),
+      ),
+    ),
+    Text(
+      workingHours,
+      style: CustomTextStyle.regularText.copyWith(
+        fontSize: responsiveSize(context, 0.04),
+      ),
+    ),
+  ],
+),
+Row(
+  children: [
+    Text(
+      "Start Date: ",
+      style: CustomTextStyle.semiBoldText.copyWith(
+        fontSize: responsiveSize(context, 0.04),
+      ),
+    ),
+    Text(
+      startDate,
+      style: CustomTextStyle.regularText.copyWith(
+        fontSize: responsiveSize(context, 0.04),
+      ),
+    ),
+  ],
+),
                       const SizedBox(height: 15),
                       Row(
                         children: [
@@ -309,7 +359,7 @@ Row(
         );
       },
       buttonText: 'View Applicants',
-      width: 350, // Specify a fixed width
+      width: 320, // Specify a fixed width
       isLoading: false,
     ),
   ],
@@ -366,6 +416,7 @@ Row(
               padding: const EdgeInsets.all(8.0),
               child: Card(
                 //color: const Color.fromARGB(255, 7, 30, 47),
+                color: Colors.white,
                 shape: RoundedRectangleBorder(
                   side: BorderSide(color: Colors.white),
                   borderRadius: BorderRadius.circular(15),
@@ -409,43 +460,83 @@ Row(
                             textColor: Colors.white,
                           ),
                           const SizedBox(height: 10),
+                          // Container(
+                          //   width: double.infinity,
+                          //   height: 50,
+                          //   decoration: BoxDecoration(
+                          //     border: Border.all(
+                          //         color:
+                          //             const Color.fromARGB(255, 7, 30, 47)),
+                                      
+                          //     borderRadius: BorderRadius.circular(15),
+                          //   ),
+                          //   child: TextButton(
+                          //     onPressed: isApplicationFull
+                          //         ? () async {
+                          //             await Provider.of<PostsProvider>(context,
+                          //                     listen: false)
+                          //                 .setJobPostAsAvailable(jobPost.id);
+                          //             setState(() {
+                          //               isApplicationFull = false;
+                          //             });
+                          //           }
+                          //         : () async {
+                          //             await Provider.of<PostsProvider>(context,
+                          //                     listen: false)
+                          //                 .setJobPostAsUnavailable(jobPost.id);
+                          //             setState(() {
+                          //               isApplicationFull = true;
+                          //             });
+                          //           },
+                          //     child: Text(
+                          //       isApplicationFull
+                          //           ? 'Make Available'
+                          //           : 'Set as Unavailable',
+                          //       style: CustomTextStyle.semiBoldText.copyWith(
+                          //           fontSize: responsiveSize(context, 0.04),
+                          //           color: const Color.fromARGB(255, 253, 253, 253)),
+                          //     ),
+                          //   ),
+                          // ),
+
                           Container(
-                            width: double.infinity,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                  color:
-                                      const Color.fromARGB(255, 255, 255, 255)),
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            child: TextButton(
-                              onPressed: isApplicationFull
-                                  ? () async {
-                                      await Provider.of<PostsProvider>(context,
-                                              listen: false)
-                                          .setJobPostAsAvailable(jobPost.id);
-                                      setState(() {
-                                        isApplicationFull = false;
-                                      });
-                                    }
-                                  : () async {
-                                      await Provider.of<PostsProvider>(context,
-                                              listen: false)
-                                          .setJobPostAsUnavailable(jobPost.id);
-                                      setState(() {
-                                        isApplicationFull = true;
-                                      });
-                                    },
-                              child: Text(
-                                isApplicationFull
-                                    ? 'Make Available'
-                                    : 'Set as Unavailable',
-                                style: CustomTextStyle.semiBoldText.copyWith(
-                                    fontSize: responsiveSize(context, 0.04),
-                                    color: Colors.orange),
-                              ),
-                            ),
-                          ),
+  width: double.infinity,
+  height: 50,
+  decoration: BoxDecoration(
+    border: Border.all(color: const Color.fromARGB(255, 7, 30, 47)),
+    borderRadius: BorderRadius.circular(15),
+  ),
+  child: TextButton(
+    onPressed: isApplicationFull
+        ? () async {
+            await Provider.of<PostsProvider>(context, listen: false)
+                .setJobPostAsAvailable(jobPost.id);
+            setState(() {
+              isApplicationFull = false;
+            });
+          }
+        : () async {
+            await Provider.of<PostsProvider>(context, listen: false)
+                .setJobPostAsUnavailable(jobPost.id);
+            setState(() {
+              isApplicationFull = true;
+            });
+          },
+    style: TextButton.styleFrom(
+      backgroundColor: const Color.fromARGB(255, 7, 30, 47), // Set background color
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15), // Match the container's border radius
+      ),
+    ),
+    child: Text(
+      isApplicationFull ? 'Make Available' : 'Set as Unavailable',
+      style: CustomTextStyle.semiBoldText.copyWith(
+        fontSize: responsiveSize(context, 0.04),
+        color: const Color.fromARGB(255, 253, 253, 253), // Text color
+      ),
+    ),
+  ),
+),
                         ],
                       ),
                     ],

@@ -25,7 +25,7 @@ class _EmployerHomePageState extends State<EmployerHomePage> {
       GlobalKey<RefreshIndicatorState>();
   final ScrollController _scrollController = ScrollController();
   final _commentTextController = TextEditingController();
-  int _postsToShow = 5;
+ // int _postsToShow = 5;
   bool _isLoading = false;
   bool _isScrollAtEnd = false;
 
@@ -36,11 +36,11 @@ class _EmployerHomePageState extends State<EmployerHomePage> {
     );
   }
 
-  void _loadMorePosts() {
-    setState(() {
-      _postsToShow += 5;
-    });
-  }
+  // void _loadMorePosts() {
+  //   setState(() {
+  //     _postsToShow += 5;
+  //   });
+  // }
 
   @override
   void initState() {
@@ -191,9 +191,10 @@ class _EmployerHomePageState extends State<EmployerHomePage> {
                         Expanded(
                           child: ListView.builder(
                             controller: _scrollController,
-                            itemCount: _postsToShow < posts.length
-                                ? _postsToShow
-                                : posts.length,
+                            // itemCount: _postsToShow < posts.length
+                            //     ? _postsToShow
+                            //     : posts.length,
+                             itemCount: posts.length,
                             itemBuilder: (context, index) {
                               final post = posts[index];
 
@@ -346,11 +347,13 @@ class _EmployerHomePageState extends State<EmployerHomePage> {
                                                           .spaceBetween,
                                                   children: [
                                                     role == 'Job Hunter'
-                                                        ? Expanded(
+                                                        ? 
+                                                        Expanded(
+                  
                                                             child: Row(
                                                               mainAxisAlignment:
                                                                   MainAxisAlignment
-                                                                      .center,
+                                                                      .start,
                                                               children: [
                                                                 InkWell(
                                                                   onTap:
@@ -422,11 +425,7 @@ class _EmployerHomePageState extends State<EmployerHomePage> {
                                                                                 243,
                                                                                 107,
                                                                                 4)
-                                                                            : const Color.fromARGB(
-                                                                                255,
-                                                                                255,
-                                                                                255,
-                                                                                255),
+                                                                            :  Color.fromARGB(255, 7, 30, 47),
                                                                       ),
                                                                       const SizedBox(
                                                                           width:
@@ -439,8 +438,8 @@ class _EmployerHomePageState extends State<EmployerHomePage> {
                                                                     ],
                                                                   ),
                                                                 ),
-                                                                const SizedBox(
-                                                                    width: 7),
+                                                                // const SizedBox(
+                                                                //     width: 3),
                                                                 InkWell(
                                                                   onTap:
                                                                       () async {
@@ -513,9 +512,9 @@ class _EmployerHomePageState extends State<EmployerHomePage> {
                                                                                 4)
                                                                             : const Color.fromARGB(255, 7, 30, 47),
                                                                       ),
-                                                                      const SizedBox(
-                                                                          width:
-                                                                              3),
+                                                                   //   const SizedBox(
+                                                                      //    width:
+                                                                        //      3),
                                                                       Text(
                                                                         'Dislike (${(post.data() as Map<String, dynamic>)['dislikes']?.length ?? 0})',
                                                                         style: CustomTextStyle
@@ -525,7 +524,7 @@ class _EmployerHomePageState extends State<EmployerHomePage> {
                                                                   ),
                                                                 ),
                                                                 const SizedBox(
-                                                                    width: 7),
+                                                                    width: 3),
                                                                 InkWell(
                                                                   onTap: () {
                                                                     showCommentDialog(
@@ -558,9 +557,9 @@ class _EmployerHomePageState extends State<EmployerHomePage> {
                                                                               Icons.comment,
                                                                               color: const Color.fromARGB(255, 0, 0, 0),
                                                                             ),
-                                                                            const SizedBox(width: 5),
+                                                                         //   const SizedBox(width: 3),
                                                                             Text(
-                                                                              'Comments ($commentCount)',
+                                                                              'Remarks ($commentCount)',
                                                                               style: CustomTextStyle.regularText,
                                                                             ),
                                                                           ],
@@ -600,11 +599,11 @@ class _EmployerHomePageState extends State<EmployerHomePage> {
                             },
                           ),
                         ),
-                        if (_isScrollAtEnd && _postsToShow < posts.length)
-                          ElevatedButton(
-                            onPressed: _loadMorePosts,
-                            child: const Text('See More'),
-                          ),
+                        // if (_isScrollAtEnd && _postsToShow < posts.length)
+                        //   ElevatedButton(
+                        //     onPressed: _loadMorePosts,
+                        //     child: const Text('See More'),
+                        //   ),
                       ],
                     ),
                   );

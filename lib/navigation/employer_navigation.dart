@@ -320,9 +320,9 @@ class _EmployerNavigationState extends State<EmployerNavigation> {
             label: '',
           ),
         ],
-        unselectedItemColor: Colors.grey,
-        selectedItemColor: Color.fromARGB(255, 7, 30, 47),
-        backgroundColor: Colors.white,
+        unselectedItemColor: const Color.fromARGB(255, 255, 255, 255),
+        selectedItemColor: const Color.fromARGB(255, 243, 107, 4),
+        backgroundColor:  Color.fromARGB(255, 7, 30, 47),
         // backgroundColor: Color.fromARGB(255, 7, 30, 47),
         currentIndex: _selectedIndex,
         onTap: (value) {

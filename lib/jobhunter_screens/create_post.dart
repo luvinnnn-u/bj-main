@@ -88,16 +88,17 @@ class _PostPageState extends State<PostPage> {
                 ),
               ),
               const SizedBox(height: 30),
+              _buildLabel('Description'),
               TextField(
                 controller: _descriptionController,
                 focusNode: _descriptionFocusNode,
-                decoration: customInputDecoration('Description'),
-                cursorColor: Colors.white,
+                decoration: customInputDecoration(''),
+                cursorColor: Color.fromARGB(255, 7, 30, 47),
                 style: CustomTextStyle.regularText.copyWith(
                   fontSize: responsiveSize(context, 0.04),
                 ),
-                maxLines: 20,
-                minLines: 1,
+                maxLines: 4,
+              //  minLines: 1,
                 keyboardType: TextInputType.multiline,
                 textAlign: TextAlign.left,
               ),
@@ -112,41 +113,14 @@ class _PostPageState extends State<PostPage> {
                     ),
                   ),
                 ),
-           //   const SizedBox(height: 20),
-              // Container(
-              //   height: 120, // Set a fixed height for the TextField
-              //   child: TextField(
-              //     controller: _descriptionController,
-              //     focusNode: _descriptionFocusNode,
-              //     decoration: customInputDecoration('Description'),
-              //     cursorColor: Colors.white,
-              //     style: CustomTextStyle.regularText.copyWith(
-              //       fontSize: responsiveSize(context, 0.04),
-              //     ),
-              //     maxLines: 4, // Maximum number of lines
-              //     minLines: 1, // Minimum number of lines
-              //     keyboardType: TextInputType.multiline,
-              //     textAlign: TextAlign.left,
-              //   ),
-              // ),
-              // if (_isDescriptionFocused)
-              //   const Padding(
-              //     padding: EdgeInsets.only(top: 8.0),
-              //     child: Align(
-              //       alignment: Alignment.centerLeft,
-              //       child: Text(
-              //         'Provide a detailed description.',
-              //         style: CustomTextStyle.regularText,
-              //       ),
-              //     ),
-              //   ),
-              
+           
               const SizedBox(height: 20),
+              _buildLabel('Type Of Job'),
               TextField(
                 controller: _typeController,
                 focusNode: _typeFocusNode,
-                decoration: customInputDecoration('Type of Job'),
-                cursorColor: Colors.white,
+                decoration: customInputDecoration(''),
+                cursorColor: Color.fromARGB(255, 7, 30, 47),
                 style: CustomTextStyle.regularText.copyWith(
                   fontSize: responsiveSize(context, 0.04),
                 ),
@@ -186,7 +160,7 @@ class _PostPageState extends State<PostPage> {
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                        side: const BorderSide(color: Colors.white),
+                        side: const BorderSide(color: Color.fromARGB(255, 7, 30, 47)),
                         backgroundColor: const Color.fromARGB(255, 7, 30, 47),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15),
@@ -195,7 +169,7 @@ class _PostPageState extends State<PostPage> {
                       child: Text(
                         'Cancel',
                         style: CustomTextStyle.regularText
-                            .copyWith(color: Colors.orange),
+                            .copyWith(color: const Color.fromARGB(255, 255, 255, 255)),
                       ),
                     ),
                   ),
@@ -207,6 +181,9 @@ class _PostPageState extends State<PostPage> {
       ),
     );
   }
+
+
+
 
   //posting
   void createPost(BuildContext context) async {
@@ -240,4 +217,20 @@ class _PostPageState extends State<PostPage> {
       }
     }
   }
+
+  
+  Widget _buildLabel(String label) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 5.0),
+      child: Text(
+        label,
+        style: CustomTextStyle.semiBoldText.copyWith(
+          fontSize: responsiveSize(context, 0.04),
+        ),
+      ),
+    );
+  }
+
 }
+
+

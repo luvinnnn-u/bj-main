@@ -98,26 +98,26 @@ class _JobhunterNavigationState extends State<JobhunterNavigation> {
       backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       body: defaultScreens[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+        backgroundColor: const  Color.fromARGB(255, 7, 30, 47),
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home, color: _selectedIndex == 0 ? const Color.fromARGB(255, 7, 30, 47) : Colors.grey),
+            icon: Icon(Icons.home, color: _selectedIndex == 0 ? const Color.fromARGB(255, 243, 107, 4) : const Color.fromARGB(255, 255, 255, 255)),
             label: '',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.search_rounded, color: _selectedIndex == 1 ? const Color.fromARGB(255, 7, 30, 47) : Colors.grey),
+            icon: Icon(Icons.search_rounded, color: _selectedIndex == 1 ? Color.fromARGB(255, 243, 107, 4) : const Color.fromARGB(255, 255, 255, 255)),
             label: '',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.add_box, color: _selectedIndex == 2 ? const Color.fromARGB(255, 7, 30, 47) : Colors.grey),
+            icon: Icon(Icons.add_box, color: _selectedIndex == 2 ? Color.fromARGB(255, 243, 107, 4) : const Color.fromARGB(255, 255, 255, 255)),
             label: '',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.message, color: _selectedIndex == 3 ? const Color.fromARGB(255, 7, 30, 47) : Colors.grey),
+            icon: Icon(Icons.message, color: _selectedIndex == 3 ? Color.fromARGB(255, 243, 107, 4) : const Color.fromARGB(255, 255, 255, 255)),
             label: '',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person, color: _selectedIndex == 4 ? const Color.fromARGB(255, 7, 30, 47) : Colors.grey),
+            icon: Icon(Icons.person, color: _selectedIndex == 4 ? Color.fromARGB(255, 243, 107, 4) : const Color.fromARGB(255, 255, 255, 255)),
             label: '',
           ),
         ],

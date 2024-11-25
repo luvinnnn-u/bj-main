@@ -221,8 +221,8 @@ class _ProfilePageState extends State<ProfilePage> {
             );
           }
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return const Center(
-              child: Text("No posts available"),
+            return Center(
+              child: Text("No posts available", style: CustomTextStyle.regularText.copyWith(fontSize: responsiveSize(context, 0.04)),),
             );
           }
 
@@ -428,11 +428,11 @@ class _ProfilePageState extends State<ProfilePage> {
                                                               .contains(
                                                                   auth.currentUser!.uid)
                                                       ? const Color.fromARGB(255, 243, 107, 4)
-                                                      : const Color.fromARGB(255, 255, 255, 255),
+                                                      : const  Color.fromARGB(255, 7, 30, 47),
                                                 ),
                                                 const SizedBox(width: 5),
                                                 Text(
-                                                  'React (${(post.data() as Map<String, dynamic>)['likes']?.length ?? 0})',
+                                                  'Like (${(post.data() as Map<String, dynamic>)['likes']?.length ?? 0})',
                                                   style: CustomTextStyle
                                                       .regularText,
                                                 ),
@@ -447,10 +447,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                             },
                                             child: const Row(
                                               children: [
-                                                Icon(Icons.comment, color: Colors.white,),
+                                                Icon(Icons.comment, color:  Color.fromARGB(255, 7, 30, 47),),
                                                 SizedBox(width: 5),
                                                 Text(
-                                                  'Comments',
+                                                  'Remarks',
                                                   style: CustomTextStyle
                                                       .regularText,
                                                 ),
@@ -578,7 +578,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                 BorderRadius
                                                                     .circular(
                                                                         5),
-                                                            color: Colors.white,
+                                                            color: Color.fromARGB(255, 7, 30, 47),
                                                           ),
                                                       child: Center(
                                                             child: Text(
@@ -592,18 +592,13 @@ class _ProfilePageState extends State<ProfilePage> {
                                                                       : 'Apply Job',
                                                               style:
                                                                   CustomTextStyle
-                                                                      .regularText
+                                                                      .semiBoldText
                                                                       .copyWith(
                                                                 color: isApplied ||
                                                                         isApplicationFull
                                                                     ? Colors
                                                                         .grey
-                                                                    : const Color
-                                                                        .fromARGB(
-                                                                        255,
-                                                                        0,
-                                                                        0,
-                                                                        0),
+                                                                    : const Color.fromARGB(255, 255, 255, 255),
                                                                 fontSize:
                                                                     responsiveSize(
                                                                         context,
@@ -664,7 +659,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                               5),
-                                                      color: Colors.white,
+                                                      color: const Color.fromARGB(255, 243, 107, 4) ,
                                                     ),
                                                     child: Center(
                                                       child: Text(
@@ -672,13 +667,11 @@ class _ProfilePageState extends State<ProfilePage> {
                                                             ? 'Saved'
                                                             : 'Save for Later',
                                                         style: CustomTextStyle
-                                                            .regularText
+                                                            .semiBoldText
                                                             .copyWith(
                                                           color: isSaved
                                                               ? Colors.grey
-                                                              : const Color
-                                                                  .fromARGB(
-                                                                  255, 0, 0, 0),
+                                                              : const Color.fromARGB(255, 255, 255, 255),
                                                           fontSize:
                                                               responsiveSize(
                                                                   context,

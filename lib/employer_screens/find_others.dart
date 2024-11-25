@@ -57,11 +57,11 @@ class _FindOthersPageState extends State<FindOthersPage> {
   }
 
   Widget build(BuildContext context) {
-    final appBarColor = Color.fromARGB(255, 7, 30, 47);
+   // final appBarColor = Color.fromARGB(255, 7, 30, 47);
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: appBarColor,
+    //    backgroundColor: appBarColor,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back,
               color: Color.fromARGB(255, 7, 30, 47)),

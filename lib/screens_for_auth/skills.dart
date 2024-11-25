@@ -102,7 +102,7 @@ class _ButtonSpecializationPageState extends State<ButtonSpecializationPage> {
                               ),
                             ),
                             selected: isSelected,
-                            selectedColor: const Color.fromARGB(255, 7, 30, 47),
+                         //   selectedColor: const Color.fromARGB(255, 7, 30, 47),
                           //  backgroundColor:
                              //   isSelected ? const Color.fromARGB(255, 7, 30, 47) : const Color.fromARGB(255, 7, 30, 47),
                             checkmarkColor: Colors.orange,
